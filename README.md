@@ -184,6 +184,7 @@ $aCurl->storeResponseBody(false);
 - Auto closing cURL handler (default=true)
 
 ```php
+// Block auto close
 $aCurl->autoClose(false);
 
 do {
