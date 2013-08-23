@@ -70,7 +70,7 @@ class aCurl
               $_responseHeaders = array(),
               $_responseHeadersRaw = '';
 
-    // Stor reponse headers & body?
+    // Store reponse headers & body?
     protected $_storeResponseHeaders = true,
               $_storeResponseBody = true;
 
