@@ -16,7 +16,7 @@
 */
 
 /**
-* @class aCurlException v1.0
+* @class aCurlException v0.1
 *
 * Throw an exception.
 */

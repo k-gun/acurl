@@ -16,12 +16,14 @@
 */
 
 /**
-* @class aCurl v1.0
+* @class aCurl v0.1
 *
 * A cURL object.
 */
 class aCurl
 {
+    protected static $_version = '0.1';
+
     // Request methods
     const
         METHOD_GET    = 'GET',
@@ -50,7 +52,6 @@ class aCurl
     protected $_options = array(),
               $_optionsDefault = array(
                   CURLOPT_CUSTOMREQUEST  => self::METHOD_GET,
-                  CURLOPT_USERAGENT      => 'aCurl/v1.0',
                   CURLOPT_RETURNTRANSFER => 1,
                   CURLOPT_HEADER         => 1,
                   // Expect -> Required for a proper response headers & body
@@ -86,13 +87,16 @@ class aCurl
         if (!extension_loaded('curl')) {
             throw new aCurlException('cURL extension not found!');
         }
-
+        // Init cURL handle
         $this->_ch = curl_init();
+        // Set URL if provided
         if ($url != '') {
             $this->setUrl($url);
         }
-
+        // Set options if provided
         $this->setOption($options);
+        // Set user agent
+        $this->_optionsDefault[CURLOPT_USERAGENT] = 'aCurl/v'. self::$_version;
     }
 
     /**
