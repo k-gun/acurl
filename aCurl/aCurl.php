@@ -42,8 +42,8 @@ class aCurl
     // cURL info
     protected $_info = array();
     // cURL errno & errstr
-    protected $_errno = 0,
-              $_errstr = '';
+    protected $_failCode = 0,
+              $_failText = '';
 
     // Used for auto curl_close()
     protected $_autoClose = true;
@@ -159,8 +159,8 @@ class aCurl
 
             // We have error?
             if ($curlResult === false) {
-                $this->_errno  = curl_errno($this->_ch);
-                $this->_errstr = curl_error($this->_ch);
+                $this->_failCode = curl_errno($this->_ch);
+                $this->_failText = curl_error($this->_ch);
             } else {
                 // Correction for explode operation
                 if (!$this->getOption('header')) {
@@ -178,7 +178,7 @@ class aCurl
                 $this->close();
             }
         } catch (aCurlException $e) {
-            $this->_errstr = $e->getMessage();
+            $this->_failText = $e->getMessage();
         }
     }
 
@@ -216,7 +216,7 @@ class aCurl
      */
     public function setMethod($method) {
         if (array_key_exists(CURLOPT_POST, $this->_options)) {
-            $this->_options[CURLOPT_POST] = 0;
+            unset($this->_options[CURLOPT_POST]);
         }
         $this->_method = strtoupper($method);
         $this->_options[CURLOPT_CUSTOMREQUEST] = $this->_method;
@@ -334,21 +334,21 @@ class aCurl
      * Check aCurl error.
      */
     public function isFail() {
-        return (bool) ($this->_errstr !== '');
+        return (bool) ($this->_failText !== '');
     }
 
     /**
      * Get aCurl error code.
      */
     public function getFailCode() {
-        return $this->_errno;
+        return $this->_failCode;
     }
 
     /**
      * Get aCurl error text.
      */
     public function getFailText() {
-        return $this->_errstr;
+        return $this->_failText;
     }
 
     /**
