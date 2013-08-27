@@ -142,7 +142,7 @@ class aCurl
             // Prepare all options [NOTE: Be sure already set all needed options before run()]
             $this->_setOptionArray();
 
-            if (!isset($this->_options[CURLOPT_URL])) {
+            if (empty($this->_url)) {
                 throw new aCurlException('I need an URL! :(');
             }
 
@@ -388,7 +388,12 @@ class aCurl
                 $body = http_build_query($body);
             }
             $this->_requestBody = trim($body);
-	        $this->_options[CURLOPT_POSTFIELDS] = $this->_requestBody;
+            $this->_options[CURLOPT_POSTFIELDS] = $this->_requestBody;
+            // Add required headers
+            $this->setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            if ($this->_requestBody) {
+                $this->setRequestHeader('Content-Length', strlen($this->_requestBody));
+            }
         }
     }
 
