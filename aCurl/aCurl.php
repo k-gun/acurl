@@ -605,8 +605,8 @@ class aCurl
      * Set aCurl info.
      */
     protected function _setInfo() {
-        $infoTmp = curl_getinfo($this->_ch);
         $infoArr = array();
+        $infoTmp = curl_getinfo($this->_ch);
         if (!empty($infoTmp) && isset($infoTmp['request_header'])) {
             $tmp = explode("\r\n", trim($infoTmp['request_header']));
             // GET /user/123 HTTP/1.1
@@ -623,7 +623,7 @@ class aCurl
             // Set _request
             $requestHeader  = trim($infoTmp['request_header']);
             $this->_request = $requestHeader ."\r\n\r\n".
-                              trim(isset($infoArr['request_body']) ? $infoArr['request_body'] : '');
+                              isset($infoArr['request_body'] ? trim($infoArr['request_body']) : '';
             // Set _requestHeaders
             foreach ($infoArr['request_headers'] as $key => $val) {
                 $this->_requestHeaders[$key] = $val;
