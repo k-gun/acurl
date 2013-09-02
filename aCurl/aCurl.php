@@ -615,11 +615,13 @@ class aCurl
             $infoArr['request_method']   = $requestMethod;
             $infoArr['request_uri']      = $requestUri;
             $infoArr['request_protocol'] = $requestProtocol;
+
+            $infoArr['request_header']   = $infoTmp['request_header'];
+            $infoArr['request_headers']  = $this->_parseHeaders($tmp);
             if (isset($this->_options[CURLOPT_POSTFIELDS])) {
                 $infoArr['request_body'] = $this->_options[CURLOPT_POSTFIELDS];
             }
-            $infoArr['request_headers']  = $this->_parseHeaders($tmp);
-            $infoArr['request_header']   = $infoTmp['request_header'];
+
             // Set _request
             $requestHeader  = trim($infoTmp['request_header']);
             $this->_request = $requestHeader ."\r\n\r\n".
