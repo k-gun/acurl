@@ -623,7 +623,7 @@ class aCurl
             // Set _request
             $requestHeader  = trim($infoTmp['request_header']);
             $this->_request = $requestHeader ."\r\n\r\n".
-                              isset($infoArr['request_body'] ? trim($infoArr['request_body']) : '';
+                              isset($infoArr['request_body']) ? trim($infoArr['request_body']) : '';
             // Set _requestHeaders
             foreach ($infoArr['request_headers'] as $key => $val) {
                 $this->_requestHeaders[$key] = $val;
