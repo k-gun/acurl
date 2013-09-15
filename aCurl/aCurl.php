@@ -77,7 +77,7 @@ class aCurl
 
 
     /**
-     * Make a new aCurl instance with the given arguments.
+     * Make a new aCurl instance (with the given arguments).
      *
      * @param string $url (optional)
      * @param array  $options (optional)
