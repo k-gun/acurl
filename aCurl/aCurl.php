@@ -18,7 +18,7 @@
 /**
  * @class aCurl v0.1
  *
- * A cURL object.
+ * aCurl object.
  */
 class aCurl
 {
