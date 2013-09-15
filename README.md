@@ -51,7 +51,7 @@ if ($responseHeaders['response_code'] >= 400) {
 // Work with response body
 $responseBody = $aCurl->getResponseBody();
 $dom = new Dom($responseBody); // trivial class just for example
-print $dom->getElementById('hplogo')->getAtrribute('src');
+print $dom->getElementById('foo')->getAtrribute('src');
 ```
 
 - Set & get options
