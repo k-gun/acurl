@@ -22,6 +22,7 @@
  */
 class aCurl
 {
+    // aCurl version
     protected static $_version = '0.1';
 
     // Request methods
