@@ -484,6 +484,22 @@ class aCurl
     }
 
     /**
+     * Get response status code.
+     */
+    public function getStatusCode() {
+        return isset($this->_responseHeaders['status_code'])
+            ? $this->_responseHeaders['status_code'] : 0;
+    }
+
+    /**
+     * Get response status text.
+     */
+    public function getStatusText() {
+        return isset($this->_responseHeaders['status_text'])
+            ? $this->_responseHeaders['status_text'] : '';
+    }
+
+    /**
      * Set response headers.
      *
      * @param mixed $headers (required)
@@ -564,10 +580,10 @@ class aCurl
 
         if (is_array($headersTmp) || !empty($headersTmp)) {
             foreach ($headersTmp as $header) {
-                // HTTP/1.1 200 OK
+                // E.g: HTTP/1.1 301 Moved Permanently
                 if (preg_match('~^HTTP/[\d\.]+ (\d+) ([\w- ]+)~i', $header, $matches)) {
-                    $headersArr['response_code'] = (int) $matches[1];
-                    $headersArr['response_text'] = $matches[2];
+                    $headersArr['status_code'] = (int) $matches[1];
+                    $headersArr['status_text'] = strval($matches[2]);
                     continue;
                 }
                 @ list($key, $val) = explode(':', $header, 2);
@@ -626,7 +642,7 @@ class aCurl
             // Set _request
             $requestHeader  = trim($infoTmp['request_header']);
             $this->_request = $requestHeader ."\r\n\r\n".
-                              isset($infoArr['request_body']) ? trim($infoArr['request_body']) : '';
+                              (isset($infoArr['request_body']) ? trim($infoArr['request_body']) : '');
             // Set _requestHeaders
             foreach ($infoArr['request_headers'] as $key => $val) {
                 $this->_requestHeaders[$key] = $val;

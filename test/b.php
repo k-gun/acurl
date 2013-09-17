@@ -6,6 +6,8 @@ setcookie('Foo2', 222);
 Lorem ipsum dolor...
 
 <?php
+exit;
+
 print('<pre>');
 // printf('get -> %s<br>', print_r($_GET, 1));
 // printf('post -> %s<br>', print_r($_POST, 1));

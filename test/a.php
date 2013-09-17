@@ -44,7 +44,10 @@ $aCurl = new aCurl($url);
 //     'fileData' => file_get_contents('./myfile-1.txt'),
 // ));
 
-// $aCurl->run();
+$aCurl->run();
+
+pre($aCurl->getStatusCode());
+pre($aCurl->getStatusText());
 
 // pre($aCurl->getMaxRecvSpeedLarge());
 
