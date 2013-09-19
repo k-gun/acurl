@@ -31,8 +31,8 @@ Array
     [content_type] => text/html
     [location] => http://google.com/
     [pragma] => no-cache
-    [response_code] => 301
-    [response_text] => Moved Permanently
+    [status_code] => 301
+    [status_text] => Moved Permanently
     [set_cookie] => Array
         (
             [0] => ...
@@ -42,10 +42,14 @@ Array
 )
 */
 
+// Check response status
+print $aCurl->getStatusCode(); // 301
+print $aCurl->getStatusText(); // Move Permanently
+
 // Work with response headers
 $responseHeaders = $aCurl->getResponseHeaders();
-if ($responseHeaders['response_code'] >= 400) {
-    printf('Error: %s', $responseHeaders['response_text']);
+if ($responseHeaders['status_code'] >= 400) {
+    printf('Error: %s', $responseHeaders['status_text']);
 }
 
 // Work with response body
@@ -170,7 +174,7 @@ Content-Length: 0
 $aCurl->getResponseBody();
 
 // get response header
-$aCurl->getResponseHeader('response_code');
+$aCurl->getResponseHeader('status_code');
 // get response headers
 $aCurl->getResponseHeaders(); // array(...)
 // get response headers raw?
