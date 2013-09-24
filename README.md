@@ -123,8 +123,9 @@ print $aCurl->getInfo('url');
 - Request
 
 ```php
-// set headers
+// set headers (all available)
 $aCurl->setRequestHeader('X-Foo-1: foo1');
+$aCurl->setRequestHeader('X-Foo-1', 'foo1');
 $aCurl->setRequestHeader(array('X-Foo-2: foo2'));
 $aCurl->setRequestHeader(array('X-Foo-3' => 'foo3'));
 
