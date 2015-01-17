@@ -63,15 +63,15 @@ print $dom->getElementById('foo')->getAtrribute('src');
 Note: See for available CURLOPT_* constants: http://tr.php.net/curl_setopt
 
 ```php
-$aCurl = new aCurl($url, array(
+$aCurl = new aCurl($url, [
     'followlocation' => 1,
-    ...
-));
+    // ...
+]);
 // or
-$aCurl->setOption(array(
+$aCurl->setOptions([
     'followlocation' => 1,
-    ...
-));
+    // ...
+]);
 $aCurl->setOption('followlocation', 1);
 // or
 $aCurl->setOption(CURLOPT_FOLLOWLOCATION, 1);
@@ -82,7 +82,7 @@ print $aCurl->getOption('followlocation'); // 1
 print $aCurl->getOption(CURLOPT_FOLLOWLOCATION);
 print $aCurl->getFollowlocation();
 
-pritn $aCurl->getOptions(); // array(...)
+pritn $aCurl->getOptions(); // [...)
 ```
 
 - Set & get method

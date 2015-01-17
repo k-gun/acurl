@@ -1,62 +1,62 @@
 <?php
-require_once '../aCurl/aCurlException.php';
-require_once '../aCurl/aCurl.php';
+require('../ACurl/ACurlException.php');
+require('../ACurl/ACurl.php');
 
 // $url = 'http://uri.li/cJjN';
 $url = 'http://dev.local/acurl/test/b.php';
 
 // $prm = array('a'=>array(1,2), 'b'=>3);
 
-$aCurl = new aCurl($url);
-// $aCurl->setMethod(aCurl::METHOD_PUT);
+$acurl = new ACurl\ACurl($url);
+// $acurl->setMethod(ACurl\ACurl::METHOD_PUT);
 
-// $aCurl->storeResponseHeaders(false);
-// $aCurl->storeResponseBody(false);
+// $acurl->storeResponseHeaders(false);
+// $acurl->storeResponseBody(false);
 
-// $aCurl->setRequestHeader('X-Foo-1: foo1');
-// $aCurl->setRequestHeader(array('X-Foo-2: foo2'));
-// $aCurl->setRequestHeader(array('X-Foo-3' => 'foo3'));
+// $acurl->setRequestHeader('X-Foo-1: foo1');
+// $acurl->setRequestHeader(array('X-Foo-2: foo2'));
+// $acurl->setRequestHeader(array('X-Foo-3' => 'foo3'));
 
-// $aCurl->setUrlParams($prm);
-// $aCurl->setRequestBody($prm);
+// $acurl->setUrlParams($prm);
+// $acurl->setRequestBody($prm);
 
-// $aCurl->setCookie('a=1;');
-// $aCurl->setOption('cookie', 'a=1;');
+// $acurl->setCookie('a=1;');
+// $acurl->setOption('cookie', 'a=1;');
 
-// $aCurl->setOption('header', 0);
-// $aCurl->setOption('nobody', 0);
-// $aCurl->setOption('returntransfer', 0);
+// $acurl->setOption('header', 0);
+// $acurl->setOption('nobody', 0);
+// $acurl->setOption('returntransfer', 0);
 
-// $aCurl->setTimeoutMs(1000);
+// $acurl->setTimeoutMs(1000);
       // ->setMaxRecvSpeedLarge(111);
-// $aCurl->set_timeoutMs(1000);
+// $acurl->set_timeoutMs(1000);
 
-// $aCurl->setFollowlocation(1);
+// $acurl->setFollowlocation(1);
 
-// $aCurl->setUrlParam(array(
+// $acurl->setUrlParam(array(
 //     'foo' => 1,
 //     'bar' => 'The bar!'
 // ));
 
-// $aCurl->setMethod(aCurl::METHOD_POST);
-// $aCurl->setRequestBody(array(
+// $acurl->setMethod(ACurl\ACurl::METHOD_POST);
+// $acurl->setRequestBody(array(
 //     'fileName' => 'myfile-2.txt',
 //     'fileData' => file_get_contents('./myfile-1.txt'),
 // ));
 
-$aCurl->run();
+$acurl->run();
 
-pre($aCurl->getStatusCode());
-pre($aCurl->getStatusText());
+pre($acurl->getStatusCode());
+pre($acurl->getStatusText());
 
-// pre($aCurl->getMaxRecvSpeedLarge());
+// pre($acurl->getMaxRecvSpeedLarge());
 
-// pre($aCurl->getUrl());
-// pre($aCurl->getRequestHeaders());
-// pre($aCurl->getResponseHeaders());
+pre($acurl->getUrl());
+pre($acurl->getRequestHeaders());
+pre($acurl->getResponseHeaders());
 
 // pre("---Response Body---");
-// pre($aCurl->getResponseBody());
+pre($acurl->getResponseBody());
 
 function pre($s, $e = 0) {
     printf('<pre>%s</pre>', print_r($s, 1));
