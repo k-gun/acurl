@@ -168,8 +168,8 @@ class ACurl
     /**
      * Set a new ACurl instance.
      *
-     * @param string $url  - could be set later but before run()
-     * @param array  options
+     * @param  string $url  - could be set later but before run()
+     * @param  array  options
      * @throws ACurlException
      */
     public function __construct($url = '', array $options = []) {
@@ -213,8 +213,10 @@ class ACurl
     /**
      * Actually, only for set/get operations for CURLOPT_*.
      *
-     * @param str   $name
-     * @param array $args
+     * @param  str   $name
+     * @param  array $args
+     * @return mixed
+     * @throws ACurlException - if method does not exists
      * @note - see available constants: php.net/curl_setopt
      * @usage
      * - CURLOPT_URL           -> setUrl('php.net')
@@ -244,6 +246,8 @@ class ACurl
 
     /**
      * Perform cURL request.
+     *
+     * @throws ACurlException
      */
     public function run() {
         try {
@@ -707,6 +711,7 @@ class ACurl
      *
      * @param  string $key
      * @return string $key
+     * @throws ACurlException
      * @note - see available constants: php.net/curl_setopt
      */
     protected function _prepareOptionKey($key) {

@@ -23,6 +23,7 @@ namespace ACurl;
  *
  * @package ACurl
  * @object  ACurl\ACurlException
+ * @extends \Exception
  * @version 0.2
  * @author  Kerem Güneş <qeremy@gmail>
 */
@@ -31,9 +32,10 @@ class ACurlException
 {
 	public function __construct() {
         $args = func_get_args();
-        $mesg = count($args) == 1
-	        ? sprintf("\n%s\n", $args[0])
-	        : sprintf("\n%s\n", vsprintf(array_shift($args), $args));
+        $mesg = array_shift($args);
+        if (count($args)) {
+            $mesg = vsprintf($mesg, $args);
+        }
         parent::__construct($mesg);
     }
 }
