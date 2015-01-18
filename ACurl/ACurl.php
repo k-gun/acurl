@@ -277,7 +277,7 @@ class ACurl
                 $this->_failCode = curl_errno($this->_ch);
                 $this->_failText = curl_error($this->_ch);
             } else {
-                // correction for `explode`
+                // correction for "explode"
                 if (!$this->getOption('header')) {
                     $this->_response = "\r\n\r\n". $this->_response;
                 }
@@ -578,7 +578,7 @@ class ACurl
     /**
      * Get request headers (raw).
      *
-     * @param bool $raw
+     * @param  bool $raw
      * @return mixed|null
      */
     public function getRequestHeaders($raw = false) {
@@ -599,7 +599,7 @@ class ACurl
     /**
      * Get response body.
      *
-     * @return str|null
+     * @return string|null
      */
     public function getResponseBody() {
         return $this->_responseBody;
@@ -608,7 +608,7 @@ class ACurl
     /**
      * Get response header.
      *
-     * @param string $key
+     * @param  string $key
      * @return mixed|null
      */
     public function getResponseHeader($key) {
@@ -717,7 +717,7 @@ class ACurl
     }
 
     /**
-     * Prepare option key (curl_setopt constants).
+     * Prepare option key ("curl_setopt" constants).
      *
      * @param  string $key
      * @return string $key
@@ -820,7 +820,6 @@ class ACurl
     protected function _setInfo() {
         // get cURL info
         $info = curl_getinfo($this->_ch);
-
         if (!empty($info)
             && isset($info['request_header'])
                 && ($requestHeader = trim($info['request_header']))
@@ -853,7 +852,6 @@ class ACurl
                 $this->_requestHeadersRaw = $requestHeader;
             }
         }
-
         // merge
         $this->_info += $info;
         // sort by key
