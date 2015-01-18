@@ -43,12 +43,12 @@ Array
 )
 */
 
-// Check response status
+// check response status
 print $acurl->getStatus();     // 301 Moved Permanently
 print $acurl->getStatusCode(); // 301
 print $acurl->getStatusText(); // Moved Permanently
 
-// Print response body
+// print response body
 print $acurl->getResponseBody();
 ```
 
