@@ -19,8 +19,7 @@ print_r($acurl->getResponseHeaders());
 /* Result
 Array
 (
-    [accept] => */*
-    [host] => dev.local
+    [host] => uri.li
     [user_agent] => ACurl/v0.3 (+http://github.com/qeremy/acurl)
     ...
 )
