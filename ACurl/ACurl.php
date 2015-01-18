@@ -822,7 +822,7 @@ class ACurl
 
         if (!empty($info)
             && isset($info['request_header'])
-            && ($requestHeader = trim($info['request_header']))
+                && ($requestHeader = trim($info['request_header']))
         ) {
             (array) $headers =@ explode("\r\n", $requestHeader);
             if (!empty($headers)) {
