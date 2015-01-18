@@ -683,7 +683,7 @@ class ACurl
      */
     protected function _setResponseHeaders($headers) {
         if ($this->_storeResponseHeaders) {
-            $this->_responseHeaders   += $this->_parseHeaders($headers);
+            $this->_responseHeaders   += $this->_parseHeaders($headers, 'response');
             $this->_responseHeadersRaw = trim($headers);
         }
     }
@@ -754,31 +754,44 @@ class ACurl
     }
 
     /**
+     * Prepares header key.
+     *
+     * @param string $key
+     * @note - converts all header keys to "underscored"
+     */
+    protected function _prepareHeaderKey($key) {
+        return preg_replace(['~\s+~', '~(\s|-)~'], [' ', '_'], strtolower($key));
+    }
+
+    /**
      * Parse headers.
      *
      * @param  array|string $headers
      * @return array
      */
-    protected function _parseHeaders($headers) {
+    protected function _parseHeaders($headers, $source) {
         $return = [];
         // could be array (internally used)
         if (is_string($headers)) {
             $headers = trim($headers);
             $headers =@ explode("\r\n", $headers);
         }
+
+        // e.g: HTTP/1.1 301 Moved Permanently
+        if ($source == 'response'
+            && preg_match('~^HTTP/\d\.\d (\d+) ([\w- ]+)~i', array_shift($headers), $matches)
+            && isset($matches[1], $matches[2])
+        ) {
+            $statusCode = (int) $matches[1];
+            $statusText = trim($matches[2]);
+            $return['status']      = $statusCode .' '. $statusText;
+            $return['status_code'] = $statusCode;
+            $return['status_text'] = $statusText;
+        }
+
         // if we have headers
-        if (is_array($headers) || !empty($headers)) {
+        if (!empty($headers)) {
             foreach ($headers as $header) {
-                // e.g: HTTP/1.1 301 Moved Permanently
-                if (preg_match('~^HTTP/\d\.\d (\d+) ([\w- ]+)~i', $header, $matches)
-                        && isset($matches[1], $matches[2])) {
-                    $statusCode = (int) $matches[1];
-                    $statusText = trim($matches[2]);
-                    $return['status']      = $statusCode .' '. $statusText;
-                    $return['status_code'] = $statusCode;
-                    $return['status_text'] = $statusText;
-                    continue;
-                }
                 // split key-value pairs
                 @list($key, $value) = explode(':', $header, 2);
                 if ($key) {
@@ -800,16 +813,6 @@ class ACurl
     }
 
     /**
-     * Prepares header key.
-     *
-     * @param string $key
-     * @note - converts all header keys to "underscored"
-     */
-    protected function _prepareHeaderKey($key) {
-        return preg_replace(['~\s+~', '~(\s|-)~'], [' ', '_'], strtolower($key));
-    }
-
-    /**
      * Sets ACurl info.
      */
     protected function _setInfo() {
@@ -828,7 +831,7 @@ class ACurl
 
             // set headers
             $this->_info['request_header']   = $info['request_header'];
-            $this->_info['request_headers']  = $this->_parseHeaders($headers);
+            $this->_info['request_headers']  = $this->_parseHeaders($headers, 'request');
 
             // set request body
             if (isset($this->_options[CURLOPT_POSTFIELDS])) {
