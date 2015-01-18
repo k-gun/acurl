@@ -179,8 +179,8 @@ class ACurl
         }
 
         // init cURL session
-        (bool) $this->_ch =@ curl_init();
-        if ($this->_ch === false) {
+        $this->_ch =@ curl_init();
+        if (!is_resource($this->_ch)) {
             throw new ACurlException('Could not initialize cURL session!');
         }
 
