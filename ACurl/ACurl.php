@@ -856,6 +856,6 @@ class ACurl
         // merge
         $this->_info += $info;
         // sort by key
-        ksort($this->_ch);
+        ksort($this->_info);
     }
 }
