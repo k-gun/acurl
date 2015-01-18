@@ -23,7 +23,7 @@ namespace ACurl;
  *
  * @package ACurl
  * @object  ACurl\ACurl
- * @version 0.2
+ * @version 0.3
  * @author  Kerem Güneş <qeremy@gmail>
  */
 class ACurl
