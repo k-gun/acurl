@@ -262,8 +262,8 @@ class ACurl
 
             // prevent output whole reponse if CURLOPT_RETURNTRANSFER=0
             ob_start();
-            (bool) $curlResult =@ curl_exec($this->_ch);
-            $this->_response   = ob_get_clean();
+            $curlResult =@ curl_exec($this->_ch);
+            $this->_response = ob_get_clean();
             if (is_string($curlResult)) {
                 $this->_response = $curlResult;
             }
