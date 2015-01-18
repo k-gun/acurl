@@ -105,10 +105,10 @@ print $acurl->getUrlParams();     // [...]
 - Get cURL info (after `run()`)
 
 ```php
-$info = $acurl->getInfo();
-print $info['url'];
-// or
 print $acurl->getInfo('url');
+// or
+$info = $acurl->getInfoAll();
+print $info['url'];
 ```
 
 - Request
@@ -208,7 +208,7 @@ $acurl = new ACurl\ACurl('http://local/upload.php');
 $acurl->setMethod(ACurl\ACurl::METHOD_POST);
 $acurl->setRequestBody(array(
     'fileName' => 'myfile-2.txt',
-    'fileData' => file_get_contents('./myfile-1.txt'),
+    'fileData' => file('./myfile-1.txt'),
 ));
 $acurl->run();
 
