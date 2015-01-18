@@ -629,21 +629,13 @@ class ACurl
     }
 
     /**
-     * Whether response headers will be stored in ACurl object.
+     * Get response status.
      *
-     * @param bool $raw
+     * @return string
      */
-    public function storeResponseHeaders($value) {
-        $this->_storeResponseHeaders = (bool) $value;
-    }
-
-    /**
-     * Whether response body will be stored in ACurl object.
-     *
-     * @param bool $raw
-     */
-    public function storeResponseBody($value) {
-        $this->_storeResponseBody = (bool) $value;
+    public function getStatus() {
+        return isset($this->_responseHeaders['status'])
+            ? $this->_responseHeaders['status'] : '';
     }
 
     /**
@@ -664,6 +656,24 @@ class ACurl
     public function getStatusText() {
         return isset($this->_responseHeaders['status_text'])
             ? $this->_responseHeaders['status_text'] : '';
+    }
+
+    /**
+     * Whether response body will be stored in ACurl object.
+     *
+     * @param bool $raw
+     */
+    public function storeResponseBody($value) {
+        $this->_storeResponseBody = (bool) $value;
+    }
+
+    /**
+     * Whether response headers will be stored in ACurl object.
+     *
+     * @param bool $raw
+     */
+    public function storeResponseHeaders($value) {
+        $this->_storeResponseHeaders = (bool) $value;
     }
 
     /**
@@ -762,8 +772,11 @@ class ACurl
                 // e.g: HTTP/1.1 301 Moved Permanently
                 if (preg_match('~^HTTP/\d\.\d (\d+) ([\w- ]+)~i', $header, $matches)
                         && isset($matches[1], $matches[2])) {
-                    $return['status_code'] = (int) $matches[1];
-                    $return['status_text'] = trim($matches[2]);
+                    $statusCode = (int) $matches[1];
+                    $statusText = trim($matches[2]);
+                    $return['status']      = $statusCode .' '. $statusText;
+                    $return['status_code'] = $statusCode;
+                    $return['status_text'] = $statusText;
                     continue;
                 }
                 // split key-value pairs
