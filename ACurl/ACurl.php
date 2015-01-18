@@ -633,7 +633,7 @@ class ACurl
      *
      * @return string
      */
-    public function getStatus() {
+    public function getResponseStatus() {
         return isset($this->_responseHeaders['_status'])
             ? $this->_responseHeaders['_status'] : '';
     }
@@ -643,7 +643,7 @@ class ACurl
      *
      * @return int
      */
-    public function getStatusCode() {
+    public function getResponseStatusCode() {
         return isset($this->_responseHeaders['_status_code'])
             ? $this->_responseHeaders['_status_code'] : 0;
     }
@@ -653,7 +653,7 @@ class ACurl
      *
      * @return string
      */
-    public function getStatusText() {
+    public function getResponseStatusText() {
         return isset($this->_responseHeaders['_status_text'])
             ? $this->_responseHeaders['_status_text'] : '';
     }

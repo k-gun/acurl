@@ -56,8 +56,9 @@ $acurl = new ACurl\ACurl($url);
 $acurl->run();
 
 // pre($acurl->getUrl());
-// pre($acurl->getStatusCode());
-// pre($acurl->getStatusText());
+pre($acurl->getResponseStatus());
+pre($acurl->getResponseStatusCode());
+pre($acurl->getResponseStatusText());
 
 pre($acurl->getRequestHeaders());
 pre($acurl->getResponseHeaders());

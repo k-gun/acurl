@@ -44,9 +44,9 @@ Array
 */
 
 // check response status
-print $acurl->getStatus();     // 301 Moved Permanently
-print $acurl->getStatusCode(); // 301
-print $acurl->getStatusText(); // Moved Permanently
+print $acurl->getResponseStatus();     // 301 Moved Permanently
+print $acurl->getResponseStatusCode(); // 301
+print $acurl->getResponseStatusText(); // Moved Permanently
 
 // print response body
 print $acurl->getResponseBody();
