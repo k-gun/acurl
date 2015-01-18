@@ -661,41 +661,41 @@ class ACurl
     /**
      * Whether response body will be stored in ACurl object.
      *
-     * @param bool $raw
+     * @param bool $option
      */
-    public function storeResponseBody($value) {
-        $this->_storeResponseBody = (bool) $value;
+    public function storeResponseBody($option) {
+        $this->_storeResponseBody = (bool) $option;
     }
 
     /**
      * Whether response headers will be stored in ACurl object.
      *
-     * @param bool $raw
+     * @param bool $option
      */
-    public function storeResponseHeaders($value) {
-        $this->_storeResponseHeaders = (bool) $value;
-    }
-
-    /**
-     * Set response headers.
-     *
-     * @param mixed $headers
-     */
-    protected function _setResponseHeaders($headers) {
-        if ($this->_storeResponseHeaders) {
-            $this->_responseHeaders = $this->_parseHeaders($headers, 'response');
-            $this->_responseHeadersRaw = trim($headers);
-        }
+    public function storeResponseHeaders($option) {
+        $this->_storeResponseHeaders = (bool) $option;
     }
 
     /**
      * Set response body.
      *
-     * @param mixed $body
+     * @param string $body
      */
     protected function _setResponseBody($body) {
         if ($this->_storeResponseBody) {
             $this->_responseBody = trim($body);
+        }
+    }
+
+    /**
+     * Set response headers.
+     *
+     * @param string $headers
+     */
+    protected function _setResponseHeaders($headers) {
+        if ($this->_storeResponseHeaders) {
+            $this->_responseHeaders = $this->_parseHeaders($headers, 'response');
+            $this->_responseHeadersRaw = trim($headers);
         }
     }
 
