@@ -32,7 +32,7 @@ class ACurl
      * Version.
      * @const double
      */
-    const VERSION = 0.2;
+    const VERSION = 0.3;
 
     /**
      * Request methods.
