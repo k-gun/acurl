@@ -788,8 +788,7 @@ class ACurl
                 $statusCode = (int) $matches[1];
                 $statusText = preg_replace_callback('~(\w[^ ]+)~', function($m) {
                     // make an expected status text
-                    return ($m[1] == 'OK')
-                        ? 'OK' : mb_convert_case($m[1], MB_CASE_TITLE);
+                    return ($m[1] == 'OK') ? 'OK' : mb_convert_case($m[1], MB_CASE_TITLE);
                 }, trim($matches[2]));
                 $return['_status']      = $statusCode .' '. $statusText;
                 $return['_status_code'] = $statusCode;
