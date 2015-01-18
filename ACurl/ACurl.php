@@ -773,27 +773,25 @@ class ACurl
         $return = [];
         // could be array (internally used)
         if (is_string($headers)) {
-            $headers = trim($headers);
-            $headers =@ explode("\r\n", $headers);
-        }
-
-        // set response status stuff
-        if ($source == 'response'
-            // HTTP/1.1 200 OK
-            && preg_match('~^HTTP/\d\.\d (\d+) ([\w- ]+)~i', array_shift($headers), $matches)
-                && isset($matches[1], $matches[2])
-        ) {
-            $statusCode = (int) $matches[1];
-            $statusText = trim($matches[2]);
-            $return['_status']      = $statusCode .' '. $statusText;
-            $return['_status_code'] = $statusCode;
-            $return['_status_text'] = $statusText;
+            (array) $headers =@ explode("\r\n", trim($headers));
         }
 
         // if we have headers
         if (!empty($headers)) {
+            // set response status stuff
+            if ($source == 'response'
+                // HTTP/1.1 200 OK
+                && preg_match('~^HTTP/\d\.\d (\d+) ([\w- ]+)~i', array_shift($headers), $matches)
+                    && isset($matches[1], $matches[2])
+            ) {
+                $statusCode = (int) $matches[1];
+                $statusText = trim($matches[2]);
+                $return['_status']      = $statusCode .' '. $statusText;
+                $return['_status_code'] = $statusCode;
+                $return['_status_text'] = $statusText;
+            }
+            // split key-value pairs
             foreach ($headers as $header) {
-                // split key-value pairs
                 @list($key, $value) = explode(':', $header, 2);
                 if ($key) {
                     $key = $this->_prepareHeaderKey($key);
