@@ -5,16 +5,16 @@
 `$url = http://uri.li/cJjN`
 
 ```php
-$aCurl = new aCurl($url);
+$acurl = new aCurl($url);
 // or
-$aCurl = new aCurl();
-$aCurl->setUrl($url);
+$acurl = new aCurl();
+$acurl->setUrl($url);
 
 // Execute cURL request
-$aCurl->run();
+$acurl->run();
 
-print_r($aCurl->getRequestHeaders());
-print_r($aCurl->getResponseHeaders());
+print_r($acurl->getRequestHeaders());
+print_r($acurl->getResponseHeaders());
 
 /* Result
 Array
@@ -43,17 +43,17 @@ Array
 */
 
 // Check response status
-print $aCurl->getStatusCode(); // 301
-print $aCurl->getStatusText(); // Move Permanently
+print $acurl->getStatusCode(); // 301
+print $acurl->getStatusText(); // Move Permanently
 
 // Work with response headers
-$responseHeaders = $aCurl->getResponseHeaders();
+$responseHeaders = $acurl->getResponseHeaders();
 if ($responseHeaders['status_code'] >= 400) {
     printf('Error: %s', $responseHeaders['status_text']);
 }
 
 // Work with response body
-$responseBody = $aCurl->getResponseBody();
+$responseBody = $acurl->getResponseBody();
 $dom = new Dom($responseBody); // trivial class just for example
 print $dom->getElementById('foo')->getAtrribute('src');
 ```
@@ -63,82 +63,82 @@ print $dom->getElementById('foo')->getAtrribute('src');
 Note: See for available CURLOPT_* constants: http://tr.php.net/curl_setopt
 
 ```php
-$aCurl = new aCurl($url, [
+$acurl = new aCurl($url, [
     'followlocation' => 1,
     // ...
 ]);
 // or
-$aCurl->setOptions([
+$acurl->setOptions([
     'followlocation' => 1,
     // ...
 ]);
-$aCurl->setOption('followlocation', 1);
+$acurl->setOption('followlocation', 1);
 // or
-$aCurl->setOption(CURLOPT_FOLLOWLOCATION, 1);
+$acurl->setOption(CURLOPT_FOLLOWLOCATION, 1);
 // or
-$aCurl->setFollowlocation(1);
+$acurl->setFollowlocation(1);
 
-print $aCurl->getOption('followlocation'); // 1
-print $aCurl->getOption(CURLOPT_FOLLOWLOCATION);
-print $aCurl->getFollowlocation();
+print $acurl->getOption('followlocation'); // 1
+print $acurl->getOption(CURLOPT_FOLLOWLOCATION);
+print $acurl->getFollowlocation();
 
-pritn $aCurl->getOptions(); // [...)
+pritn $acurl->getOptions(); // [...)
 ```
 
 - Set & get method
 
 ```php
-$aCurl = new aCurl($url);
-$aCurl->setMethod(aCurl::METHOD_POST);
+$acurl = new aCurl($url);
+$acurl->setMethod(aCurl::METHOD_POST);
 
-print $aCurl->getMethod() // POST
+print $acurl->getMethod() // POST
 ```
 
 - Set URL params
 
 ```php
-$aCurl = new aCurl($url);
-$aCurl->setUrlParam('foo', 1);
+$acurl = new aCurl($url);
+$acurl->setUrlParam('foo', 1);
 // or
-$aCurl->setUrlParam(array(
+$acurl->setUrlParam(array(
     'foo' => 1,
     'bar' => 'The bar!'
 ));
 
-print $aCurl->getUrlParam('foo'); // 1
-print $aCurl->getUrlParams(); // array(...)
+print $acurl->getUrlParam('foo'); // 1
+print $acurl->getUrlParams(); // array(...)
 
-// $aCurl->getUrl() -> <$url>?foo=1&bar=The+bar%21
+// $acurl->getUrl() -> <$url>?foo=1&bar=The+bar%21
 ```
 
 - Get cURL info (after `run()`)
 
 ```php
-$info = $aCurl->getInfo();
+$info = $acurl->getInfo();
 print $info['url'];
 // or
-print $aCurl->getInfo('url');
+print $acurl->getInfo('url');
 ```
 
 - Request
 
 ```php
 // set headers (all available)
-$aCurl->setRequestHeader('X-Foo-1: foo1');
-$aCurl->setRequestHeader('X-Foo-1', 'foo1');
-$aCurl->setRequestHeader(array('X-Foo-2: foo2'));
-$aCurl->setRequestHeader(array('X-Foo-3' => 'foo3'));
+$acurl->setRequestHeader('X-Foo-1: foo1');
+$acurl->setRequestHeader('X-Foo-1', 'foo1');
+$acurl->setRequestHeader(array('X-Foo-2: foo2'));
+$acurl->setRequestHeader(array('X-Foo-3' => 'foo3'));
 
 // set body (while posting data)
 // Note: Doesn't work if aCurl method is GET
-$aCurl->setRequestBody('foo=1&bar=The+bar%21');
-$aCurl->setRequestBody(array(
+$acurl->setRequestBody('foo=1&bar=The+bar%21');
+$acurl->setRequestBody(array(
     'foo' => 1,
     'bar' => 'The bar!'
 ));
 
 // get raw equest
-print $aCurl->getRequest();
+print $acurl->getRequest();
 /*
 GET /cJjN HTTP/1.1
 User-Agent: aCurl/v1.0
@@ -147,21 +147,21 @@ Host: uri.li
 */
 
 // get request body
-$aCurl->getRequestBody();
+$acurl->getRequestBody();
 
 // get request header
-$aCurl->getRequestHeader('host');
+$acurl->getRequestHeader('host');
 // get request headers
-$aCurl->getRequestHeaders(); // array(...)
+$acurl->getRequestHeaders(); // array(...)
 // get request headers raw?
-$aCurl->getRequestHeaders(true);
+$acurl->getRequestHeaders(true);
 ```
 
 - Response
 
 ```php
 // get raw response
-$aCurl->getResponse();
+$acurl->getResponse();
 /*
 HTTP/1.1 301 Moved Permanently
 Server: nginx
@@ -172,31 +172,31 @@ Content-Length: 0
 */
 
 // get response body
-$aCurl->getResponseBody();
+$acurl->getResponseBody();
 
 // get response header
-$aCurl->getResponseHeader('status_code');
+$acurl->getResponseHeader('status_code');
 // get response headers
-$aCurl->getResponseHeaders(); // array(...)
+$acurl->getResponseHeaders(); // array(...)
 // get response headers raw?
-$aCurl->getResponseHeaders(true);
+$acurl->getResponseHeaders(true);
 
 // not storing response headers & body
-$aCurl->storeResponseHeaders(false);
-$aCurl->storeResponseBody(false);
+$acurl->storeResponseHeaders(false);
+$acurl->storeResponseBody(false);
 ```
 
 - Auto closing cURL handler (default=true)
 
 ```php
 // Block auto close
-$aCurl->autoClose(false);
+$acurl->autoClose(false);
 
 do {
     $retry = 0;
     // exec
-    $aCurl->run();
-    if ($aCurl->getResponseBody() == '') {
+    $acurl->run();
+    if ($acurl->getResponseBody() == '') {
         sleep(1);
         ++$retry;
     }
@@ -204,19 +204,19 @@ do {
 
 // remember to call this
 // forgot anyway? it's ok! aCurl::__destruct() will close it...
-$aCurl->close();
+$acurl->close();
 ```
 
 - Simple upload
 
 ```php
-$aCurl = new aCurl('http://local/upload.php');
-$aCurl->setMethod(aCurl::METHOD_POST);
-$aCurl->setRequestBody(array(
+$acurl = new aCurl('http://local/upload.php');
+$acurl->setMethod(aCurl::METHOD_POST);
+$acurl->setRequestBody(array(
     'fileName' => 'myfile-2.txt',
     'fileData' => file_get_contents('./myfile-1.txt'),
 ));
-$aCurl->run();
+$acurl->run();
 
 // upload.php
 $fileName = $_POST['fileName'];
@@ -227,8 +227,8 @@ file_put_contents("./$fileName", $fileData);
 - Error handling
 
 ```php
-if ($aCurl->isFail()) {
+if ($acurl->isFail()) {
     printf('Error! Code[%d] Text[%s]',
-        $aCurl->getFailCode(), $aCurl->getFailText());
+        $acurl->getFailCode(), $acurl->getFailText());
 }
 ```

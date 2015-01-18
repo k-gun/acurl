@@ -19,7 +19,7 @@ namespace ACurl;
 /**
  * ACurlException
  *
- * Throws an exception.
+ * Throws an exception providing "sprintf" functionalities.
  *
  * @package ACurl
  * @object  ACurl\ACurlException

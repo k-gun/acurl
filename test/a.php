@@ -1,4 +1,13 @@
 <?php
+header('content-type: text/plain');
+
+function pre($s, $e = 0) {
+    printf("%s\n", print_r($s, 1));
+    if ($e) exit;
+}
+
+/************************************/
+
 require('../ACurl/ACurlException.php');
 require('../ACurl/ACurl.php');
 
@@ -8,7 +17,7 @@ $url = 'http://dev.local/acurl/test/b.php';
 // $prm = array('a'=>array(1,2), 'b'=>3);
 
 $acurl = new ACurl\ACurl($url);
-// $acurl->setMethod(ACurl\ACurl::METHOD_PUT);
+$acurl->setMethod(ACurl\ACurl::METHOD_PUT);
 
 // $acurl->storeResponseHeaders(false);
 // $acurl->storeResponseBody(false);
@@ -46,7 +55,7 @@ $acurl = new ACurl\ACurl($url);
 
 $acurl->run();
 
-pre($acurl->getStatusCode());
+pre($acurl,1);
 pre($acurl->getStatusText());
 
 // pre($acurl->getMaxRecvSpeedLarge());
@@ -57,8 +66,3 @@ pre($acurl->getResponseHeaders());
 
 // pre("---Response Body---");
 pre($acurl->getResponseBody());
-
-function pre($s, $e = 0) {
-    printf('<pre>%s</pre>', print_r($s, 1));
-    if ($e) exit;
-}

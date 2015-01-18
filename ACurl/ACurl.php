@@ -105,7 +105,7 @@ class ACurl
         CURLOPT_CUSTOMREQUEST  => self::METHOD_GET,
         CURLOPT_RETURNTRANSFER => 1,
         CURLOPT_HEADER         => 1,
-        # required for a proper response body and headers
+        // required for a proper response body and headers
         CURLOPT_HTTPHEADER     => ['Expect:'],
         CURLINFO_HEADER_OUT    => 1
     ];
@@ -181,7 +181,7 @@ class ACurl
         // init cURL session
         (bool) $this->_ch =@ curl_init();
         if ($this->_ch === false) {
-            throw new ACurlException('Could not initialize cURL session.');
+            throw new ACurlException('Could not initialize cURL session!');
         }
 
         // set URL if provided
@@ -213,8 +213,8 @@ class ACurl
     /**
      * Actually, only for set/get operations for CURLOPT_*.
      *
-     * @param  str   $name
-     * @param  array $args
+     * @param  string $name
+     * @param  array  $args
      * @return mixed
      * @throws ACurlException - if method does not exists
      * @note - see available constants: php.net/curl_setopt
@@ -746,7 +746,7 @@ class ACurl
     /**
      * Parse headers.
      *
-     * @param  mixed $headers
+     * @param  array|string $headers
      * @return array
      */
     protected function _parseHeaders($headers) {
