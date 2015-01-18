@@ -55,7 +55,7 @@ $acurl->setMethod(ACurl\ACurl::METHOD_PUT);
 
 $acurl->run();
 
-pre($acurl,1);
+pre($acurl->getStatusCode());
 pre($acurl->getStatusText());
 
 // pre($acurl->getMaxRecvSpeedLarge());
