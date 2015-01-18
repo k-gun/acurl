@@ -634,8 +634,8 @@ class ACurl
      * @return string
      */
     public function getStatus() {
-        return isset($this->_responseHeaders['status'])
-            ? $this->_responseHeaders['status'] : '';
+        return isset($this->_responseHeaders['_status'])
+            ? $this->_responseHeaders['_status'] : '';
     }
 
     /**
@@ -644,8 +644,8 @@ class ACurl
      * @return int
      */
     public function getStatusCode() {
-        return isset($this->_responseHeaders['status_code'])
-            ? $this->_responseHeaders['status_code'] : 0;
+        return isset($this->_responseHeaders['_status_code'])
+            ? $this->_responseHeaders['_status_code'] : 0;
     }
 
     /**
@@ -654,8 +654,8 @@ class ACurl
      * @return string
      */
     public function getStatusText() {
-        return isset($this->_responseHeaders['status_text'])
-            ? $this->_responseHeaders['status_text'] : '';
+        return isset($this->_responseHeaders['_status_text'])
+            ? $this->_responseHeaders['_status_text'] : '';
     }
 
     /**
@@ -784,9 +784,9 @@ class ACurl
         ) {
             $statusCode = (int) $matches[1];
             $statusText = trim($matches[2]);
-            $return['status']      = $statusCode .' '. $statusText;
-            $return['status_code'] = $statusCode;
-            $return['status_text'] = $statusText;
+            $return['_status']      = $statusCode .' '. $statusText;
+            $return['_status_code'] = $statusCode;
+            $return['_status_text'] = $statusText;
         }
 
         // if we have headers
