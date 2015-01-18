@@ -360,8 +360,7 @@ class ACurl
     /**
      * Set request URL params.
      *
-     * @param string $key
-     * @param mixed  $value
+     * @param array $params
      */
     public function setUrlParams(array $params) {
         $this->_setUrlParams($params);
