@@ -39,8 +39,9 @@ class ACurl
      * @const string
      */
     const METHOD_GET     = 'GET',
-          METHOD_POST    = 'POST',
           METHOD_PUT     = 'PUT',
+          METHOD_POST    = 'POST',
+          METHOD_PATCH   = 'PATCH',
           METHOD_DELETE  = 'DELETE',
           METHOD_HEAD    = 'HEAD',
           METHOD_TRACE   = 'TRACE',
