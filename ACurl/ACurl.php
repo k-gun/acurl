@@ -559,7 +559,7 @@ class ACurl
     /**
      * Get request body.
      *
-     * @return str
+     * @return string
      */
     public function getRequestBody() {
         return $this->_requestBody;
