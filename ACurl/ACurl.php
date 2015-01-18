@@ -830,11 +830,11 @@ class ACurl
                 $theRequest = array_shift($headers);
                 // GET /user/123 HTTP/1.1
                 sscanf($theRequest, '%s %s %s', $requestMethod, $requestUri, $requestProtocol);
-                $this->_info['request_method']   = $requestMethod;
-                $this->_info['request_uri']      = $requestUri;
-                $this->_info['request_protocol'] = $requestProtocol;
-                $this->_info['request_header']   = $requestHeader;
-                $this->_info['request_headers']  = $this->_parseHeaders($headers, 'request');
+                $this->_info['_request_method']   = $requestMethod;
+                $this->_info['_request_uri']      = $requestUri;
+                $this->_info['_request_protocol'] = $requestProtocol;
+                $this->_info['_request_header']   = $requestHeader;
+                $this->_info['_request_headers']  = $this->_parseHeaders($headers, 'request');
 
                 // set request body
                 if (isset($this->_options[CURLOPT_POSTFIELDS])) {
@@ -845,7 +845,7 @@ class ACurl
                 $this->_request = $requestHeader ."\r\n\r\n".
                     (isset($this->_info['request_body']) ? trim($this->_info['request_body']) : '');
                 // set request headers property
-                foreach ($this->_info['request_headers'] as $key => $val) {
+                foreach ($this->_info['_request_headers'] as $key => $val) {
                     $this->_requestHeaders[$key] = $val;
                 }
                 // set request headers raw property
