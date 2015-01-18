@@ -683,7 +683,7 @@ class ACurl
      */
     protected function _setResponseHeaders($headers) {
         if ($this->_storeResponseHeaders) {
-            $this->_responseHeaders   += $this->_parseHeaders($headers, 'response');
+            $this->_responseHeaders = $this->_parseHeaders($headers, 'response');
             $this->_responseHeadersRaw = trim($headers);
         }
     }
