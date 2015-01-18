@@ -777,10 +777,11 @@ class ACurl
             $headers =@ explode("\r\n", $headers);
         }
 
-        // e.g: HTTP/1.1 301 Moved Permanently
+        // set response status stuff
         if ($source == 'response'
+            // HTTP/1.1 200 OK
             && preg_match('~^HTTP/\d\.\d (\d+) ([\w- ]+)~i', array_shift($headers), $matches)
-            && isset($matches[1], $matches[2])
+                && isset($matches[1], $matches[2])
         ) {
             $statusCode = (int) $matches[1];
             $statusText = trim($matches[2]);
@@ -819,38 +820,42 @@ class ACurl
         // get cURL info
         $info = curl_getinfo($this->_ch);
 
-        if (!empty($info) && isset($info['request_header'])) {
-            $headers = explode("\r\n", trim($info['request_header']));
+        if (!empty($info)
+            && isset($info['request_header'])
+            && ($requestHeader = trim($info['request_header']))
+        ) {
+            (array) $headers =@ explode("\r\n", $requestHeader);
+            if (!empty($headers)) {
+                // set request stuff
+                $theRequest = array_shift($headers);
+                // GET /user/123 HTTP/1.1
+                sscanf($theRequest, '%s %s %s', $requestMethod, $requestUri, $requestProtocol);
+                $this->_info['request_method']   = $requestMethod;
+                $this->_info['request_uri']      = $requestUri;
+                $this->_info['request_protocol'] = $requestProtocol;
+                $this->_info['request_header']   = $requestHeader;
+                $this->_info['request_headers']  = $this->_parseHeaders($headers, 'request');
 
-            // GET /user/123 HTTP/1.1
-            $theRequest = array_shift($headers);
-            sscanf($theRequest, '%s %s %s', $requestMethod, $requestUrl, $requestProtocol);
-            $this->_info['request_method']   = $requestMethod;
-            $this->_info['request_url']      = $requestUrl;
-            $this->_info['request_protocol'] = $requestProtocol;
+                // set request body
+                if (isset($this->_options[CURLOPT_POSTFIELDS])) {
+                    $this->_info['request_body'] = $this->_options[CURLOPT_POSTFIELDS];
+                }
 
-            // set headers
-            $this->_info['request_header']   = $info['request_header'];
-            $this->_info['request_headers']  = $this->_parseHeaders($headers, 'request');
-
-            // set request body
-            if (isset($this->_options[CURLOPT_POSTFIELDS])) {
-                $this->_info['request_body'] = $this->_options[CURLOPT_POSTFIELDS];
+                // set request property
+                $this->_request = $requestHeader ."\r\n\r\n".
+                    (isset($this->_info['request_body']) ? trim($this->_info['request_body']) : '');
+                // set request headers property
+                foreach ($this->_info['request_headers'] as $key => $val) {
+                    $this->_requestHeaders[$key] = $val;
+                }
+                // set request headers raw property
+                $this->_requestHeadersRaw = $requestHeader;
             }
-
-            // set request property
-            $requestHeader  = trim($info['request_header']);
-            $this->_request = $requestHeader ."\r\n\r\n".
-                (isset($this->_info['request_body']) ? trim($this->_info['request_body']) : '');
-            // set request headers property
-            foreach ($this->_info['request_headers'] as $key => $val) {
-                $this->_requestHeaders[$key] = $val;
-            }
-            // set request headers raw property
-            $this->_requestHeadersRaw = $requestHeader;
         }
 
         // merge
         $this->_info += $info;
+        // sort by key
+        ksort($this->_ch);
     }
 }
