@@ -17,7 +17,7 @@ $url = 'http://dev.local/acurl/test/b.php';
 // $prm = array('a'=>array(1,2), 'b'=>3);
 
 $acurl = new ACurl\ACurl($url);
-$acurl->setMethod(ACurl\ACurl::METHOD_PUT);
+// $acurl->setMethod($acurl::METHOD_POST);
 
 // $acurl->storeResponseHeaders(false);
 // $acurl->storeResponseBody(false);
@@ -55,14 +55,12 @@ $acurl->setMethod(ACurl\ACurl::METHOD_PUT);
 
 $acurl->run();
 
-pre($acurl->getStatusCode());
-pre($acurl->getStatusText());
+// pre($acurl->getUrl());
+// pre($acurl->getStatusCode());
+// pre($acurl->getStatusText());
 
-// pre($acurl->getMaxRecvSpeedLarge());
-
-pre($acurl->getUrl());
 pre($acurl->getRequestHeaders());
 pre($acurl->getResponseHeaders());
 
-// pre("---Response Body---");
+pre("---Response Body---");
 pre($acurl->getResponseBody());
