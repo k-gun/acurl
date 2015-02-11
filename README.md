@@ -208,7 +208,7 @@ $acurl = new ACurl\ACurl('http://local/upload.php');
 $acurl->setMethod(ACurl\ACurl::METHOD_POST);
 $acurl->setRequestBody(array(
     'fileName' => 'myfile-2.txt',
-    'fileData' => file('./myfile-1.txt'),
+    'fileData' => file_get_contents('./myfile-1.txt'),
 ));
 $acurl->run();
 
