@@ -91,7 +91,7 @@ print $acurl->getMethod() // POST
 $acurl = new ACurl\ACurl($url);
 $acurl->setUrlParam('foo', 1);
 // or
-$acurl->setUrlParam([
+$acurl->setUrlParams([
     'foo' => 1,
     'bar' => 'The bar!'
 ]);
