@@ -15,6 +15,8 @@ ACurl\Autoload::register();
 $client = new ACurl\Client();
 // $client->send("GET https://google.com", [], null, [], ['X-foo' => 123, 'x-A'=>"aaa"]);
 // $client->send("GET https://www.facebook.com/");
-$client->send("https://ipinfo.io/");
+$client->sendFunc("https://ipinfo.io/", null, null, null, null, function($client, $request, $response) {
+    prs($response->getStatus());
+});
 
-print $client->response->getBody();
+// prs($client->response->getStatus());
