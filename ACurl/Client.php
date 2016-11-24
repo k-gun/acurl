@@ -36,8 +36,8 @@ final class Client extends ClientBase
         $this->close();
     }
 
-    final public function send(string $uri = null, array $uriParams = [], $body = null,
-        array $headers = [], array $cookies = []): self
+    final public function send(string $uri = null, array $uriParams = null, $body = null,
+        array $headers = null, array $cookies = null): self
     {
         if ($uri) {
             if (preg_match('~^(?P<method>\w+)\s+(?<uri>.+)~', $uri, $matches)) {
@@ -49,9 +49,9 @@ final class Client extends ClientBase
             }
         }
 
-        $this->request->setUriParams($uriParams)
-                      ->setHeaders($headers)
-                      ->setCookies($cookies);
+        $this->request->setUriParams((array) $uriParams)
+                      ->setHeaders((array) $headers)
+                      ->setCookies((array) $cookies);
 
         try {
             $uri = $this->request->getUriFull();
@@ -126,8 +126,13 @@ final class Client extends ClientBase
         return $this;
     }
 
-    final public function sendFunc()
-    {}
+    final public function sendFunc(string $uri = null, array $uriParams = null, $body = null,
+        array $headers = null, array $cookies = null, callable $func)
+    {
+        $this->send($uri, $uriParams, $body, $headers, $cookies);
+
+        return $func($this, $this->request, $this->response);
+    }
 
     final public function get()
     {}
