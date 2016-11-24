@@ -103,6 +103,7 @@ abstract class Stream implements StreamInterface
                     // make an expected status text
                     return ($m[1] == 'OK') ? 'OK' : mb_convert_case($m[1], MB_CASE_TITLE);
                 }, trim($matches[2]));
+                $return['_']            = $matches[0];
                 $return['_status']      = $statusCode .' '. $statusText;
                 $return['_status_code'] = $statusCode;
                 $return['_status_text'] = $statusText;
