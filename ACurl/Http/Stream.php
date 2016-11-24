@@ -112,7 +112,7 @@ abstract class Stream implements StreamInterface
             foreach ($headers as $header) {
                 @ list($key, $value) = explode(':', $header, 2);
                 if ($key !== null) {
-                    $key = self::prepareHeaderKey($key);
+                    $key = self::headerKeyToSnakeCase($key);
                     $value = trim((string) $value);
                     // handle multi-headers as array
                     if (array_key_exists($key, $return)) {
@@ -150,8 +150,15 @@ abstract class Stream implements StreamInterface
         return $return;
     }
 
-    final public static function prepareHeaderKey(string $key): string
+    final public static function headerKeyToSnakeCase(string $key): string
     {
         return preg_replace(['~\s+~', '~[\s-]+~'], [' ', '_'], strtolower($key));
+    }
+
+    final public static function headerKeyToDashCase(string $key): string
+    {
+        return preg_replace_callback('~_(\w)~', function($matches) {
+            return '-'. ucfirst($matches[1]);
+        }, ucfirst($key));
     }
 }
