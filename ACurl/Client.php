@@ -9,7 +9,7 @@ use ACurl\Http\Response;
 
 final class Client extends ClientBase
 {
-    final public function __construct(array $options = [])
+    final public function __construct($options = null)
     {
         if (!extension_loaded('curl')) {
             throw new \RuntimeException('cURL extension not found!');
@@ -18,17 +18,21 @@ final class Client extends ClientBase
         $this->request = new Request();
         $this->response = new Response();
 
-        isset($options['method'])
-            && $this->request->setMethod($options['method']);
-        isset($options['uri'])
-            && $this->request->setUri($options['uri']);
-        isset($options['uriParams'])
-            && $this->request->setUriParams($options['uriParams']);
-        isset($options['body'])
-            && $this->request->setBody($options['body']);
+        if (is_string($options)) {
+            $this->setRequestMethodAndUri($options);
+        } elseif (is_array($options)) {
+            isset($options['method'])
+                && $this->request->setMethod($options['method']);
+            isset($options['uri'])
+                && $this->request->setUri($options['uri']);
+            isset($options['uriParams'])
+                && $this->request->setUriParams($options['uriParams']);
+            isset($options['body'])
+                && $this->request->setBody($options['body']);
 
-        isset($options['options'])
-            && $this->setOptions($options['options']);
+            isset($options['options'])
+                && $this->setOptions($options['options']);
+        }
     }
 
     final public function __destruct()
@@ -36,17 +40,22 @@ final class Client extends ClientBase
         $this->close();
     }
 
+    final private function setRequestMethodAndUri(string $input)
+    {
+        if (preg_match('~^(?P<method>\w+)\s+(?<uri>.+)~', $input, $matches)) {
+            $this->request->setMethod($matches['method'])
+                          ->setUri($matches['uri']);
+        } else {
+            $this->request->setMethod(Request::METHOD_GET)
+                          ->setUri($input);
+        }
+    }
+
     final public function send(string $uri = null, array $uriParams = null, $body = null,
         array $headers = null, array $cookies = null): self
     {
         if ($uri) {
-            if (preg_match('~^(?P<method>\w+)\s+(?<uri>.+)~', $uri, $matches)) {
-                $this->request->setMethod($matches['method'])
-                              ->setUri($matches['uri']);
-            } else {
-                $this->request->setMethod(Request::METHOD_GET)
-                              ->setUri($uri);
-            }
+            $this->setRequestMethodAndUri($uri);
         }
 
         $this->request->setUriParams((array) $uriParams)
