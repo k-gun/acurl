@@ -25,9 +25,6 @@ abstract class ClientBase
     protected $ch;
     protected $info;
 
-    protected $failCode = 0,
-              $failText = '';
-
     final public function __set(string $key, $value)
     {
         switch ($key) {
@@ -103,15 +100,5 @@ abstract class ClientBase
             return $this->info;
         }
         return $this->info[$key] ?? $valueDefault;
-    }
-
-    final public function getFailCode(): int
-    {
-        return $this->failCode;
-    }
-
-    final public function getFailText(): string
-    {
-        return $this->failText;
     }
 }
