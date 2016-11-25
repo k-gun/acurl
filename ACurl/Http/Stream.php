@@ -24,7 +24,11 @@ abstract class Stream implements StreamInterface
 
     final public function getHeader(string $key, $valueDefault = null)
     {
-        return $this->headers[$key] ?? $valueDefault;
+        $value = $this->headers[$key] ?? $valueDefault;
+        if ($value === null) {
+            $value = $this->headers[self::headerKeyToSnakeCase($key)] ?? $valueDefault;
+        }
+        return $value;
     }
 
     final public function getHeaders(): array
