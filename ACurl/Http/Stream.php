@@ -38,9 +38,6 @@ abstract class Stream implements StreamInterface
     final public function setHeaders(array $headers): StreamInterface
     {
         foreach ($headers as $key => $value) {
-            if (is_array($value)) {
-                return $this->setHeaders($value);
-            }
             $this->setHeader($key, $value);
         }
         return $this;
