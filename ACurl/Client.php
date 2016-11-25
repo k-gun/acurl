@@ -19,8 +19,15 @@ final class Client extends ClientBase
         $this->response = new Response();
 
         if ($uri) {
-            $this->setRequestMethodAndUri($uri);
+            if (preg_match('~^(?P<method>\w+)\s+(?:>>\s+)?(?<uri>.+)~', $uri, $matches)) {
+                $this->request->setMethod($matches['method'])
+                              ->setUri($matches['uri']);
+            } else {
+                $this->request->setMethod(Request::METHOD_GET)
+                              ->setUri($uri);
+            }
         }
+
         if ($options) {
             isset($options['method'])
                 && $this->request->setMethod($options['method']);
@@ -44,13 +51,9 @@ final class Client extends ClientBase
         $this->close();
     }
 
-    final public function send(string $uri = null, array $uriParams = null, $body = null,
+    final public function send(array $uriParams = null, $body = null,
         array $headers = null, array $cookies = null): self
     {
-        if ($uri) {
-            $this->setRequestMethodAndUri($uri);
-        }
-
         $this->request->setUriParams((array) $uriParams)
                       ->setHeaders((array) $headers)
                       ->setCookies((array) $cookies);
@@ -58,7 +61,7 @@ final class Client extends ClientBase
         try {
             $uri = $this->request->getUriFull();
             if ($uri == '') {
-                throw new \Exception('I need an URL! :(');
+                throw new \Exception('I need a URL! :(');
             }
 
             $this->open();
@@ -76,6 +79,7 @@ final class Client extends ClientBase
             if ($method != Request::METHOD_GET && $method != Request::METHOD_POST) {
                 $options[CURLOPT_HTTPHEADER][] = 'X-HTTP-Method-Override: '. $method;
             }
+            $options[CURLOPT_CUSTOMREQUEST] = $method;
 
             if ($headers = $this->request->getHeaders()) {
                 foreach ($headers as $key => $value) {
@@ -136,10 +140,11 @@ final class Client extends ClientBase
         return $this;
     }
 
-    final public function get(string $uri = null, array $uriParams = null,
+    final public function get(array $uriParams = null,
         array $headers = null, array $cookies = null): self
     {
-        return $this->send(Request::METHOD_GET .' '. $uri, $uriParams, $headers, $cookies);
+        $this->request->setMethod(Request::METHOD_GET);
+        return $this->send($uriParams, $headers, $cookies);
     }
 
     // ...
@@ -158,18 +163,4 @@ final class Client extends ClientBase
             $this->ch = null;
         }
     }
-
-
-
-    final private function setRequestMethodAndUri(string $input)
-    {
-        if (preg_match('~^(?P<method>\w+)\s+(?<uri>.+)~', $input, $matches)) {
-            $this->request->setMethod($matches['method'])
-                          ->setUri($matches['uri']);
-        } else {
-            $this->request->setMethod(Request::METHOD_GET)
-                          ->setUri($input);
-        }
-    }
-
 }
