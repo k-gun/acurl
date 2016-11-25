@@ -22,6 +22,11 @@ final class Request extends Stream
     private $uri;
     private $uriParams = [];
 
+    final public function __construct()
+    {
+        $this->type = StreamInterface::TYPE_REQUEST;
+    }
+
     final public function setMethod(string $method): self
     {
         $this->method = strtoupper($method);

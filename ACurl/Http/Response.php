@@ -77,6 +77,11 @@ final class Response extends Stream
           HTTP_VERSION_NOT_SUPPORTED       = 505,
           BANDWIDTH_LIMIT_EXCEEDED         = 509;
 
+    final public function __construct()
+    {
+        $this->type = StreamInterface::TYPE_RESPONSE;
+    }
+
     final public function getStatus()
     {
         return $this->getHeader('_status');
