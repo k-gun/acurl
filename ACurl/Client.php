@@ -134,8 +134,8 @@ final class Client extends ClientBase
         return $this;
     }
 
-    final public function sendFunc(string $uri = null, array $uriParams = null, $body = null,
-        array $headers = null, array $cookies = null, callable $func)
+    final public function sendFunc(string $uri = null, callable $func, array $uriParams = null, $body = null,
+        array $headers = null, array $cookies = null)
     {
         $this->send($uri, $uriParams, $body, $headers, $cookies);
 
@@ -148,8 +148,8 @@ final class Client extends ClientBase
         return $this->send(Request::METHOD_GET .' '. $uri, $uriParams, $headers, $cookies);
     }
 
-    final public function getFunc(string $uri = null, array $uriParams = null,
-        array $headers = null, array $cookies = null, callable $func)
+    final public function getFunc(string $uri = null, callable $func, array $uriParams = null,
+        array $headers = null, array $cookies = null)
     {
         return $this->sendFunc(Request::METHOD_GET .' '. $uri, $uriParams, $headers, $cookies, $func);
     }
