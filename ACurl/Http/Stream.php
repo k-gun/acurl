@@ -57,6 +57,17 @@ abstract class Stream implements StreamInterface
         return $this->headers;
     }
 
+    final public function getHeadersString(): string
+    {
+        $return = '';
+        if (!empty($this->headers)) {
+            foreach ($this->headers as $key => $value) {
+                $return .= $key .': '. $value;
+            }
+        }
+        return $return;
+    }
+
     final public function getHeadersRaw(): string
     {
         $return = '';
@@ -92,6 +103,19 @@ abstract class Stream implements StreamInterface
     final public function getCookies(): array
     {
         return $this->cookies;
+    }
+
+    final public function getCookiesString(): string
+    {
+        $return = '';
+        if (!empty($this->cookies)) {
+            $cookies = [];
+            foreach ($this->cookies as $key => $value) {
+                $cookies[] = $key .'='. $value;
+            }
+            $return = join('; ', $cookies);
+        }
+        return $return;
     }
 
 

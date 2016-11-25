@@ -80,18 +80,13 @@ final class Client extends ClientBase
         }
         $options[CURLOPT_CUSTOMREQUEST] = $method;
 
-        if ($headers = $this->request->getHeaders()) {
-            foreach ($headers as $key => $value) {
-                $options[CURLOPT_HTTPHEADER][] = $key .': '. $value;
-            }
+        if ('' != ($headers = $this->request->getHeadersString())) {
+            $options[CURLOPT_HTTPHEADER][] = $headers;
         }
-        if ($cookies = $this->request->getCookies()) {
-            $cookiesArray = [];
-            foreach ($cookies as $key => $value) {
-                $cookiesArray[] = $key .'='. $value;
-            }
-            $options[CURLOPT_HTTPHEADER][] = 'Cookie: '. join('; ', $cookiesArray);
+        if ('' != ($cookies = $this->request->getCookiesString())) {
+            $options[CURLOPT_HTTPHEADER][] = 'Cookie: '. $cookies;
         }
+        unset($headers, $cookies);
 
         curl_setopt_array($this->ch, $options);
 
