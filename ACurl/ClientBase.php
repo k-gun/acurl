@@ -62,7 +62,7 @@ abstract class ClientBase
         return $this->response;
     }
 
-    final public function setOption($key, $value): self
+    final public function setOption(int $key, $value): self
     {
         $this->options[$key] = $value;
         return $this;
