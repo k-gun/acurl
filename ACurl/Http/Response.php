@@ -82,18 +82,18 @@ final class Response extends Stream
         $this->type = StreamInterface::TYPE_RESPONSE;
     }
 
-    final public function getStatus()
+    final public function getStatus(): string
     {
-        return $this->getHeader('_status');
+        return (string) $this->getHeader('_status');
     }
 
-    final public function getStatusCode()
+    final public function getStatusCode(): int
     {
-        return $this->getHeader('_status_code');
+        return (int) $this->getHeader('_status_code');
     }
 
-    final public function getStatusText()
+    final public function getStatusText(): string
     {
-        return $this->getHeader('_status_text');
+        return (string) $this->getHeader('_status_text');
     }
 }
