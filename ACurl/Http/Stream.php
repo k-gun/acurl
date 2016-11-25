@@ -9,8 +9,6 @@ abstract class Stream implements StreamInterface
     protected $body;
     protected $headers = [];
     protected $cookies = [];
-    protected $failCode = 0,
-              $failtext = '';
 
     final public function getType(): int
     {

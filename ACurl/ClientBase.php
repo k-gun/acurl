@@ -25,6 +25,9 @@ abstract class ClientBase
     protected $ch;
     protected $info;
 
+    protected $failCode = 0,
+              $failText = '';
+
     final public function __set(string $key, $value)
     {
         switch ($key) {

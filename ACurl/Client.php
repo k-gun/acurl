@@ -122,7 +122,7 @@ final class Client extends ClientBase
                 }
             }
         } catch (\Throwable $e) {
-            $this->failtext = $e->getMessage();
+            $this->failText = $e->getMessage();
         } finally {
             if ($this->autoClose) {
                 $this->close();
