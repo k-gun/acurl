@@ -95,20 +95,20 @@ final class Client extends ClientBase
                 $resultOutput = $result;
             }
 
-            $this->info = curl_getinfo($this->ch);
-
-            if (isset($this->info['request_header'])) {
-                $this->request->setHeaders($headers = Stream::parseHeaders($this->info['request_header'],
-                    Stream::TYPE_REQUEST));
-                if (isset($headers['cookie'])) {
-                    $this->request->setCookies(Stream::parseCookies($headers['cookie']));
-                }
-            }
-
             if ($result === false) {
                 $this->failCode = curl_errno($this->ch);
                 $this->failText = curl_error($this->ch);
             } else {
+                $this->info = curl_getinfo($this->ch);
+
+                if (isset($this->info['request_header'])) {
+                    $this->request->setHeaders($headers = Stream::parseHeaders($this->info['request_header'],
+                        Stream::TYPE_REQUEST));
+                    if (isset($headers['cookie'])) {
+                        $this->request->setCookies(Stream::parseCookies($headers['cookie']));
+                    }
+                }
+
                 if (!isset($options[CURLOPT_HEADER])) {
                     $resultOutput = "\r\n\r\n". $resultOutput;
                 }
