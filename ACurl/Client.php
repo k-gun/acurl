@@ -102,6 +102,8 @@ final class Client extends ClientBase
             $resultOutput = $result;
         }
 
+        prs($result);
+
         if ($result === false) {
             $this->failCode = curl_errno($this->ch);
             $this->failText = curl_error($this->ch);
@@ -136,9 +138,34 @@ final class Client extends ClientBase
         return $this;
     }
 
-    final public function get(array $uriParams = null, array $headers = null, array $cookies = null): self
+    final public function get(array $uriParams = null,
+        array $headers = null, array $cookies = null): self
     {
         $this->request->setMethod(Request::METHOD_GET);
+
+        return $this->send($uriParams, $headers, $cookies);
+    }
+
+    final public function post($body = null, array $uriParams = null,
+        array $headers = null, array $cookies = null): self
+    {
+        $this->request->setMethod(Request::METHOD_POST);
+
+        return $this->send($uriParams, $body, $headers, $cookies);
+    }
+
+    final public function put($body = null, array $uriParams = null,
+        array $headers = null, array $cookies = null): self
+    {
+        $this->request->setMethod(Request::METHOD_PUT);
+
+        return $this->send($uriParams, $body, $headers, $cookies);
+    }
+
+    final public function delete(array $uriParams = null,
+        array $headers = null, array $cookies = null): self
+    {
+        $this->request->setMethod(Request::METHOD_DELETE);
 
         return $this->send($uriParams, $headers, $cookies);
     }
