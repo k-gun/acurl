@@ -9,7 +9,7 @@ use ACurl\Http\Response;
 
 final class Client extends ClientBase
 {
-    final public function __construct($options = null)
+    final public function __construct(string $uri = null, array $options = null)
     {
         if (!extension_loaded('curl')) {
             throw new \RuntimeException('cURL extension not found!');
@@ -18,9 +18,10 @@ final class Client extends ClientBase
         $this->request = new Request();
         $this->response = new Response();
 
-        if (is_string($options)) {
-            $this->setRequestMethodAndUri($options);
-        } elseif (is_array($options)) {
+        if ($uri) {
+            $this->setRequestMethodAndUri($uri);
+        }
+        if ($options) {
             isset($options['method'])
                 && $this->request->setMethod($options['method']);
             isset($options['uri'])
