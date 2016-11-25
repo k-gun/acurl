@@ -104,4 +104,14 @@ abstract class ClientBase
         }
         return $this->info[$key] ?? $valueDefault;
     }
+
+    final public function getFailCode(): int
+    {
+        return $this->failCode;
+    }
+
+    final public function getFailText(): string
+    {
+        return $this->failText;
+    }
 }
