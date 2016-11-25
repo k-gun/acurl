@@ -40,17 +40,6 @@ final class Client extends ClientBase
         $this->close();
     }
 
-    final private function setRequestMethodAndUri(string $input)
-    {
-        if (preg_match('~^(?P<method>\w+)\s+(?<uri>.+)~', $input, $matches)) {
-            $this->request->setMethod($matches['method'])
-                          ->setUri($matches['uri']);
-        } else {
-            $this->request->setMethod(Request::METHOD_GET)
-                          ->setUri($input);
-        }
-    }
-
     final public function send(string $uri = null, array $uriParams = null, $body = null,
         array $headers = null, array $cookies = null): self
     {
@@ -179,4 +168,18 @@ final class Client extends ClientBase
             $this->ch = null;
         }
     }
+
+
+
+    final private function setRequestMethodAndUri(string $input)
+    {
+        if (preg_match('~^(?P<method>\w+)\s+(?<uri>.+)~', $input, $matches)) {
+            $this->request->setMethod($matches['method'])
+                          ->setUri($matches['uri']);
+        } else {
+            $this->request->setMethod(Request::METHOD_GET)
+                          ->setUri($input);
+        }
+    }
+
 }
