@@ -86,11 +86,11 @@ final class Client extends ClientBase
             }
         }
         if ($cookies = $this->request->getCookies()) {
-            $cookieArray = [];
+            $cookiesArray = [];
             foreach ($cookies as $key => $value) {
-                $cookieArray[] = $key .'='. $value;
+                $cookiesArray[] = $key .'='. $value;
             }
-            $options[CURLOPT_HTTPHEADER][] = 'Cookie: '. join('; ', $cookieArray);
+            $options[CURLOPT_HTTPHEADER][] = 'Cookie: '. join('; ', $cookiesArray);
         }
 
         curl_setopt_array($this->ch, $options);
