@@ -3,7 +3,7 @@ namespace ACurl;
 
 final class Autoload
 {
-    final public function register()
+    final public static function register()
     {
         return spl_autoload_register(function($className) {
             if (strpos($className, __namespace__) !== 0) {
