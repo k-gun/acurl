@@ -58,92 +58,88 @@ final class Client extends ClientBase
                       ->setHeaders((array) $headers)
                       ->setCookies((array) $cookies);
 
-        try {
-            $uri = $this->request->getUriFull();
-            if ($uri == '') {
-                throw new \Exception('I need a URL! :(');
+        $uri = $this->request->getUriFull();
+        if ($uri == '') {
+            throw new \Exception('I need a URL! :(');
+        }
+
+        $this->open();
+
+        $options = ($this->options + $this->optionsDefault);
+        if (!isset($options[CURLOPT_URL])) {
+            $options[CURLOPT_URL] = $uri;
+        }
+
+        if (!isset($options[CURLOPT_USERAGENT])) {
+            $options[CURLOPT_USERAGENT] = 'ACurl/v'. self::VERSION .' (+https://github.com/k-gun/acurl)';
+        }
+
+        $method = $this->request->getMethod();
+        if ($method != Request::METHOD_GET && $method != Request::METHOD_POST) {
+            $options[CURLOPT_HTTPHEADER][] = 'X-HTTP-Method-Override: '. $method;
+        }
+        $options[CURLOPT_CUSTOMREQUEST] = $method;
+
+        if ($headers = $this->request->getHeaders()) {
+            foreach ($headers as $key => $value) {
+                $options[CURLOPT_HTTPHEADER][] = $key .': '. $value;
             }
-
-            $this->open();
-
-            $options = ($this->options + $this->optionsDefault);
-            if (!isset($options[CURLOPT_URL])) {
-                $options[CURLOPT_URL] = $uri;
+        }
+        if ($cookies = $this->request->getCookies()) {
+            $cookieArray = [];
+            foreach ($cookies as $key => $value) {
+                $cookieArray[] = $key .'='. $value;
             }
+            $options[CURLOPT_HTTPHEADER][] = 'Cookie: '. join('; ', $cookieArray);
+        }
 
-            if (!isset($options[CURLOPT_USERAGENT])) {
-                $options[CURLOPT_USERAGENT] = 'ACurl/v'. self::VERSION .' (+https://github.com/k-gun/acurl)';
-            }
+        curl_setopt_array($this->ch, $options);
 
-            $method = $this->request->getMethod();
-            if ($method != Request::METHOD_GET && $method != Request::METHOD_POST) {
-                $options[CURLOPT_HTTPHEADER][] = 'X-HTTP-Method-Override: '. $method;
-            }
-            $options[CURLOPT_CUSTOMREQUEST] = $method;
+        ob_start();
+        $result =@ curl_exec($this->ch);
+        $resultOutput = ob_get_clean();
+        if (is_string($result)) {
+            $resultOutput = $result;
+        }
 
-            if ($headers = $this->request->getHeaders()) {
-                foreach ($headers as $key => $value) {
-                    $options[CURLOPT_HTTPHEADER][] = $key .': '. $value;
+        if ($result === false) {
+            $this->failCode = curl_errno($this->ch);
+            $this->failText = curl_error($this->ch);
+        } else {
+            $this->info = curl_getinfo($this->ch);
+
+            if (isset($this->info['request_header'])) {
+                $this->request->setHeaders($headers = Stream::parseHeaders($this->info['request_header'],
+                    Stream::TYPE_REQUEST));
+                if (isset($headers['cookie'])) {
+                    $this->request->setCookies(Stream::parseCookies($headers['cookie']));
                 }
             }
-            if ($cookies = $this->request->getCookies()) {
-                $cookieArray = [];
-                foreach ($cookies as $key => $value) {
-                    $cookieArray[] = $key .'='. $value;
-                }
-                $options[CURLOPT_HTTPHEADER][] = 'Cookie: '. join('; ', $cookieArray);
+
+            if (!isset($options[CURLOPT_HEADER])) {
+                $resultOutput = "\r\n\r\n". $resultOutput;
             }
 
-            curl_setopt_array($this->ch, $options);
+            @ list($headers, $body) = explode("\r\n\r\n", $resultOutput, 2);
+            $this->response->setBody($body);
 
-            ob_start();
-            $result =@ curl_exec($this->ch);
-            $resultOutput = ob_get_clean();
-            if (is_string($result)) {
-                $resultOutput = $result;
+            $this->response->setHeaders($headers = Stream::parseHeaders($headers, Stream::TYPE_RESPONSE));
+            if (isset($headers['set_cookie'])) {
+                $this->response->setCookies(Stream::parseCookies($headers['set_cookie']));
             }
+        }
 
-            if ($result === false) {
-                $this->failCode = curl_errno($this->ch);
-                $this->failText = curl_error($this->ch);
-            } else {
-                $this->info = curl_getinfo($this->ch);
-
-                if (isset($this->info['request_header'])) {
-                    $this->request->setHeaders($headers = Stream::parseHeaders($this->info['request_header'],
-                        Stream::TYPE_REQUEST));
-                    if (isset($headers['cookie'])) {
-                        $this->request->setCookies(Stream::parseCookies($headers['cookie']));
-                    }
-                }
-
-                if (!isset($options[CURLOPT_HEADER])) {
-                    $resultOutput = "\r\n\r\n". $resultOutput;
-                }
-
-                @ list($headers, $body) = explode("\r\n\r\n", $resultOutput, 2);
-                $this->response->setBody($body);
-
-                $this->response->setHeaders($headers = Stream::parseHeaders($headers, Stream::TYPE_RESPONSE));
-                if (isset($headers['set_cookie'])) {
-                    $this->response->setCookies(Stream::parseCookies($headers['set_cookie']));
-                }
-            }
-        } catch (\Throwable $e) {
-            $this->failText = $e->getMessage();
-        } finally {
-            if ($this->autoClose) {
-                $this->close();
-            }
+        if ($this->autoClose) {
+            $this->close();
         }
 
         return $this;
     }
 
-    final public function get(array $uriParams = null,
-        array $headers = null, array $cookies = null): self
+    final public function get(array $uriParams = null, array $headers = null, array $cookies = null): self
     {
         $this->request->setMethod(Request::METHOD_GET);
+
         return $this->send($uriParams, $headers, $cookies);
     }
 
