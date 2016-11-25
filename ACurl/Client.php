@@ -134,10 +134,17 @@ final class Client extends ClientBase
         return $func($this, $this->request, $this->response);
     }
 
-    final public function get()
-    {}
-    final public function getFunc()
-    {}
+    final public function get(string $uri = null, array $uriParams = null,
+        array $headers = null, array $cookies = null): self
+    {
+        return $this->send(Request::METHOD_GET .' '. $uri, $uriParams, $headers, $cookies);
+    }
+
+    final public function getFunc(string $uri = null, array $uriParams = null,
+        array $headers = null, array $cookies = null, callable $func)
+    {
+        return $this->sendFunc(Request::METHOD_GET .' '. $uri, $uriParams, $headers, $cookies, $func);
+    }
 
     // ...
 
