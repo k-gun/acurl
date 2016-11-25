@@ -64,7 +64,9 @@ final class Client extends ClientBase
             $this->open();
 
             $options = ($this->options + $this->optionsDefault);
-            $options[CURLOPT_URL] = $uri;
+            if (!isset($options[CURLOPT_URL])) {
+                $options[CURLOPT_URL] = $uri;
+            }
 
             if (!isset($options[CURLOPT_USERAGENT])) {
                 $options[CURLOPT_USERAGENT] = 'ACurl/v'. self::VERSION .' (+https://github.com/k-gun/acurl)';
