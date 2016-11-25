@@ -139,7 +139,7 @@ final class Client extends ClientBase
     {
         $this->send($uri, $uriParams, $body, $headers, $cookies);
 
-        return $func($this, $this->request, $this->response);
+        return $func($this->request, $this->response);
     }
 
     final public function get(string $uri = null, array $uriParams = null,
