@@ -28,9 +28,12 @@ final class Client extends ClientBase
                 && $this->request->setUri($options['uri']);
             isset($options['uriParams'])
                 && $this->request->setUriParams($options['uriParams']);
+            isset($options['headers'])
+                && $this->request->setHeaders($options['headers']);
+            isset($options['cookies'])
+                && $this->request->setCookies($options['cookies']);
             isset($options['body'])
                 && $this->request->setBody($options['body']);
-
             isset($options['options'])
                 && $this->setOptions($options['options']);
         }
