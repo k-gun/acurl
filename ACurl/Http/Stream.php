@@ -17,9 +17,35 @@ abstract class Stream implements StreamInterface
         return $this->type;
     }
 
+    final public function setBody($body): StreamInterface
+    {
+        if (is_array($body) || is_object($body)) {
+            $body = http_build_query((array) $body);
+        }
+        $this->body = $body;
+        return $this;
+    }
+
     final public function getBody()
     {
         return $this->body;
+    }
+
+    final public function setHeader(string $key, $value): StreamInterface
+    {
+        $this->headers[$key] = trim((string) $value);
+        return $this;
+    }
+
+    final public function setHeaders(array $headers): StreamInterface
+    {
+        foreach ($headers as $key => $value) {
+            if (is_array($value)) {
+                return $this->setHeaders($value);
+            }
+            $this->setHeader($key, $value);
+        }
+        return $this;
     }
 
     final public function getHeader(string $key, $valueDefault = null)
@@ -49,33 +75,6 @@ abstract class Stream implements StreamInterface
         return $return;
     }
 
-    final public function setHeader(string $key, $value): StreamInterface
-    {
-        $this->headers[$key] = trim((string) $value);
-        return $this;
-    }
-
-    final public function setHeaders(array $headers): StreamInterface
-    {
-        foreach ($headers as $key => $value) {
-            if (is_array($value)) {
-                return $this->setHeaders($value);
-            }
-            $this->setHeader($key, $value);
-        }
-        return $this;
-    }
-
-    final public function getCookie(string $key, $valueDefault = null)
-    {
-        return $this->cookies[$key] ?? $valueDefault;
-    }
-
-    final public function getCookies(): array
-    {
-        return $this->cookies;
-    }
-
     final public function setCookie(string $key, $value): StreamInterface
     {
         $this->cookies[$key] = trim((string) $value);
@@ -90,14 +89,17 @@ abstract class Stream implements StreamInterface
         return $this;
     }
 
-    final public function setBody($body): StreamInterface
+    final public function getCookie(string $key, $valueDefault = null)
     {
-        if (is_array($body) || is_object($body)) {
-            $body = http_build_query((array) $body);
-        }
-        $this->body = $body;
-        return $this;
+        return $this->cookies[$key] ?? $valueDefault;
     }
+
+    final public function getCookies(): array
+    {
+        return $this->cookies;
+    }
+
+
 
     final public function toString(): string
     {}
