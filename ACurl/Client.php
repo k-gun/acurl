@@ -95,6 +95,7 @@ final class Client extends ClientBase
 
         curl_setopt_array($this->ch, $options);
 
+        // prevent output whole reponse if CURLOPT_RETURNTRANSFER=0
         ob_start();
         $result =@ curl_exec($this->ch);
         $resultOutput = ob_get_clean();
@@ -102,33 +103,30 @@ final class Client extends ClientBase
             $resultOutput = $result;
         }
 
-        prs($result);
-
         if ($result === false) {
-            $this->failCode = curl_errno($this->ch);
-            $this->failText = curl_error($this->ch);
-        } else {
-            $this->info = curl_getinfo($this->ch);
+            throw new \RuntimeException(curl_error($this->ch), curl_errno($this->ch));
+        }
 
-            if (isset($this->info['request_header'])) {
-                $this->request->setHeaders($headers = Stream::parseHeaders($this->info['request_header'],
-                    Stream::TYPE_REQUEST));
-                if (isset($headers['cookie'])) {
-                    $this->request->setCookies(Stream::parseCookies($headers['cookie']));
-                }
+        $this->info = curl_getinfo($this->ch);
+
+        if (isset($this->info['request_header'])) {
+            $this->request->setHeaders($headers = Stream::parseHeaders($this->info['request_header'],
+                Stream::TYPE_REQUEST));
+            if (isset($headers['cookie'])) {
+                $this->request->setCookies(Stream::parseCookies($headers['cookie']));
             }
+        }
 
-            if (!isset($options[CURLOPT_HEADER])) {
-                $resultOutput = "\r\n\r\n". $resultOutput;
-            }
+        if (!isset($options[CURLOPT_HEADER])) {
+            $resultOutput = "\r\n\r\n". $resultOutput;
+        }
 
-            @ list($headers, $body) = explode("\r\n\r\n", $resultOutput, 2);
-            $this->response->setBody($body);
+        @ list($headers, $body) = explode("\r\n\r\n", $resultOutput, 2);
+        $this->response->setBody($body);
 
-            $this->response->setHeaders($headers = Stream::parseHeaders($headers, Stream::TYPE_RESPONSE));
-            if (isset($headers['set_cookie'])) {
-                $this->response->setCookies(Stream::parseCookies($headers['set_cookie']));
-            }
+        $this->response->setHeaders($headers = Stream::parseHeaders($headers, Stream::TYPE_RESPONSE));
+        if (isset($headers['set_cookie'])) {
+            $this->response->setCookies(Stream::parseCookies($headers['set_cookie']));
         }
 
         if ($this->autoClose) {
