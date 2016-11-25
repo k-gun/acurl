@@ -97,7 +97,7 @@ final class Client extends ClientBase
 
         // prevent output whole reponse if CURLOPT_RETURNTRANSFER=0
         ob_start();
-        $result =@ curl_exec($this->ch);
+        $result = curl_exec($this->ch);
         $resultOutput = ob_get_clean();
         if (is_string($result)) {
             $resultOutput = $result;
@@ -172,7 +172,7 @@ final class Client extends ClientBase
 
     final private function open()
     {
-        $this->ch =@ curl_init();
+        $this->ch = curl_init();
         if (!is_resource($this->ch)) {
             throw new \RuntimeException('Could not initialize cURL session!');
         }
