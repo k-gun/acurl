@@ -32,6 +32,19 @@ abstract class Stream implements StreamInterface
         return $this->headers;
     }
 
+    final public function getHeadersRaw(): string
+    {
+        $return = '';
+        foreach ($this->headers as $key => $value) {
+            if ($key == '_') {
+                $return .= sprintf("%s\n", $value);
+            } elseif ($key[0] != '_') {
+                $return .= sprintf("%s: %s\n", self::headerKeyToDashCase($key), $value);
+            }
+        }
+        return $return;
+    }
+
     final public function setHeader(string $key, $value): StreamInterface
     {
         $this->headers[$key] = trim((string) $value);
@@ -92,12 +105,14 @@ abstract class Stream implements StreamInterface
 
         // if we have headers
         if (!empty($headers)) {
-            // set response status stuff
-            if ($type == StreamInterface::TYPE_RESPONSE
+            $headersFirst = array_shift($headers);
+            if ($type == StreamInterface::TYPE_REQUEST
+                // GET / HTTP/1.1
+                && preg_match('~^([A-Z]+)\s+(.+)\s+HTTP/\d\.\d~', $headersFirst, $matches)) {
+                $return['_']            = $matches[0];
+            } elseif ($type == StreamInterface::TYPE_RESPONSE
                 // HTTP/1.1 200 OK
-                && preg_match('~^HTTP/\d\.\d\s+(\d+)\s+([\w- ]+)~i', array_shift($headers), $matches)
-                    && isset($matches[1], $matches[2])
-            ) {
+                && preg_match('~^HTTP/\d\.\d\s+(\d+)\s+([\w- ]+)~i', $headersFirst, $matches)) {
                 $statusCode = (int) $matches[1];
                 $statusText = preg_replace_callback('~(\w[^ ]+)~', function($m) {
                     // make an expected status text
