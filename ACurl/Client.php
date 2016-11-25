@@ -60,13 +60,11 @@ final class Client extends ClientBase
 
             $this->open();
 
-            $options = $this->options + $this->optionsDefault;
-            if (!isset($options[CURLOPT_URL])) {
-                $options[CURLOPT_URL] = $uri;
-            }
+            $options = ($this->options + $this->optionsDefault);
+            $options[CURLOPT_URL] = $uri;
 
             if (!isset($options[CURLOPT_USERAGENT])) {
-                $options[CURLOPT_USERAGENT] = 'ACurl/v'. self::VERSION .' (https://github.com/k-gun/acurl)';
+                $options[CURLOPT_USERAGENT] = 'ACurl/v'. self::VERSION .' (+https://github.com/k-gun/acurl)';
             }
 
             $method = $this->request->getMethod();
@@ -155,14 +153,14 @@ final class Client extends ClientBase
 
     // ...
 
-    final public function open()
+    final private function open()
     {
         $this->ch =@ curl_init();
         if (!is_resource($this->ch)) {
             throw new \RuntimeException('Could not initialize cURL session!');
         }
     }
-    final public function close()
+    final private function close()
     {
         if (is_resource($this->ch)) {
             curl_close($this->ch);
