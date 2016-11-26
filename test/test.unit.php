@@ -12,16 +12,25 @@ class Test
         ACurl\Autoload::register();
     }
 
-    public static function run()
+    public static function run($method)
     {
         $test = new Test();
-        $testMethods = get_class_methods($test);
-        foreach ($testMethods as $testMethod) {
-            if (substr($testMethod, 0, 5) == "test_") {
-                echo "Running: ", $testMethod, "()...\n";
-                sleep(1);
-                call_user_func_array([$test, $testMethod], []);
+        if ($method == "-all") {
+            $testMethods = get_class_methods($test);
+            foreach ($testMethods as $testMethod) {
+                if (substr($testMethod, 0, 5) == "test_") {
+                    echo "Running: ", $testMethod, "()...\n";
+                    call_user_func([$test, $testMethod]);
+                    sleep(1);
+                }
             }
+        } else {
+            $testMethod = "test_". $method;
+            if (!method_exists($test, $testMethod)) {
+                throw new \BadMethodCallException("Non-exists method 'Test::{$testMethod}()' called!");
+            }
+            echo "Running: ", $testMethod, "()...\n";
+            call_user_func([$test, $testMethod]);
         }
     }
 
@@ -84,6 +93,15 @@ class Test
         self::echo("Response status[text] is 'OK'? ",
             $client->response->getStatusText() == "OK");
     }
+
+    public function test_404NotFound()
+    {
+        $client = new ACurl\Client("get >> http://localhost/404");
+        $client->send();
+        self::echo("Response status[code] is '404'? ",
+            $client->response->getStatusCode() === 404
+            && $client->response->getStatusText() == "Not Found");
+    }
 }
 
-Test::run();
+Test::run($_SERVER["argv"][1] ?? "");
