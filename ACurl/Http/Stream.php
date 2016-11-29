@@ -123,7 +123,13 @@ abstract class Stream implements StreamInterface
 
 
     final public function toString(): string
-    {}
+    {
+        $return  = trim($this->getHeadersRaw());
+        $return .= "\r\n\r\n";
+        $return .= $this->getBody();
+
+        return $return;
+    }
 
     final public static function parseHeaders($headers, int $type): array
     {
