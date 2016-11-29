@@ -135,4 +135,15 @@ final class Response extends Stream
     {
         return (string) $this->getHeader('_status_text');
     }
+
+    /**
+     * Is success.
+     * @return bool
+     */
+    final public function isSuccess(): bool
+    {
+        $statusCode = $this->getStatusCode();
+
+        return ($statusCode >= 200 && $statusCode <= 299);
+    }
 }
