@@ -94,13 +94,22 @@ class Test
             $client->response->getStatusText() == "OK");
     }
 
+    public function test_200OK()
+    {
+        $client = new ACurl\Client("get >> http://localhost/");
+        $client->send();
+        self::echo("Response status[code] is '200'? ",
+            $client->response->getStatusCode() === 200
+                && $client->response->getStatusText() == "OK");
+    }
+
     public function test_404NotFound()
     {
         $client = new ACurl\Client("get >> http://localhost/404");
         $client->send();
         self::echo("Response status[code] is '404'? ",
             $client->response->getStatusCode() === 404
-            && $client->response->getStatusText() == "Not Found");
+                && $client->response->getStatusText() == "Not Found");
     }
 }
 
