@@ -15,10 +15,12 @@ ACurl\Autoload::register();
 // ]);
 // $client->send();
 
-// $client = new ACurl\Client('get >> http://localhost/');
-$client = new ACurl\Client('get >> http://www.google.com.tr/');
+$client = new ACurl\Client('get >> http://localhost/');
+// $client = new ACurl\Client('get >> http://www.google.com.tr/');
 $client->send();
 
-prs($client->request->getMethod());
-prs($client->request->getHeadersRaw());
-prs($client->response->getHeadersRaw());
+prs($client->request->toString());
+prs($client->response->toString());
+// prs($client->request->getMethod());
+// prs($client->request->getHeadersRaw());
+// prs($client->response->getHeadersRaw());
