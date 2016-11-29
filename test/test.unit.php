@@ -129,6 +129,13 @@ class Test
         $client->send();
         self::echo("Failure is 'true'? ", $client->response->isFailure());
     }
+
+    public function test_redirect()
+    {
+        $client = new ACurl\Client("get >> http://google.com/");
+        $client->send();
+        self::echo("Redirect is 'true'? ", $client->response->isRedirect());
+    }
 }
 
 $method =@ $_SERVER["argv"][1];
