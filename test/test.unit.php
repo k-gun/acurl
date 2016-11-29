@@ -120,7 +120,7 @@ class Test
 $method =@ $_SERVER["argv"][1];
 if ($method == "") {
     echo "Usage: php test.unit.php [method name] or [--all]\n";
-    echo "E.g: $ php test.unit.php 200OK\n";
+    echo "E.g: ~$ php test.unit.php 200OK\n";
     exit;
 }
 
