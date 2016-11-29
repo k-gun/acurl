@@ -115,6 +115,13 @@ class Test
             $client->response->getStatusCode() === 404
                 && $client->response->getStatusText() == "Not Found");
     }
+
+    public function test_success()
+    {
+        $client = new ACurl\Client("get >> http://localhost/");
+        $client->send();
+        self::echo("Success is 'true'? ", $client->response->isSuccess());
+    }
 }
 
 $method =@ $_SERVER["argv"][1];
