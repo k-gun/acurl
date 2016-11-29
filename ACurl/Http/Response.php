@@ -157,4 +157,15 @@ final class Response extends Stream
 
         return ($statusCode >= 400);
     }
+
+    /**
+     * Is redirect.
+     * @return bool
+     */
+    final public function isRedirect(): bool
+    {
+        $statusCode = $this->getStatusCode();
+
+        return ($statusCode >= 300 && $statusCode <= 399);
+    }
 }
