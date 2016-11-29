@@ -14,8 +14,12 @@ class Test
 
     public static function run($method)
     {
+        if ($method == "") {
+            throw new \InvalidArgumentException("Method is required!");
+        }
+
         $test = new Test();
-        if ($method == "-all") {
+        if ($method == "--all") {
             $testMethods = get_class_methods($test);
             foreach ($testMethods as $testMethod) {
                 if (substr($testMethod, 0, 5) == "test_") {
@@ -45,7 +49,7 @@ class Test
                 print_r($arg);
             }
         }
-        echo "\n\n";
+        echo "\n";
     }
 
     public function test_requestMethod()
@@ -113,4 +117,11 @@ class Test
     }
 }
 
-Test::run($_SERVER["argv"][1] ?? "");
+$method =@ $_SERVER["argv"][1];
+if ($method == "") {
+    echo "Usage: php test.unit.php [method name] or [--all]\n";
+    echo "E.g: $ php test.unit.php 200OK\n";
+    exit;
+}
+
+Test::run($method);
