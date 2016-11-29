@@ -33,7 +33,7 @@ class Test
             if (!method_exists($test, $testMethod)) {
                 throw new \BadMethodCallException("Non-exists method 'Test::{$testMethod}()' called!");
             }
-            echo "Running: ", $testMethod, "()...\n";
+            echo "Running: \e[1m", $testMethod, "()\e[0m...\n";
             call_user_func([$test, $testMethod]);
         }
     }
