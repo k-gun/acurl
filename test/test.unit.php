@@ -23,7 +23,7 @@ class Test
             $testMethods = get_class_methods($test);
             foreach ($testMethods as $testMethod) {
                 if (substr($testMethod, 0, 5) == "test_") {
-                    echo "Running: ", $testMethod, "()...\n";
+                    echo "Running: \e[1m", $testMethod, "()\e[0m...\n";
                     call_user_func([$test, $testMethod]);
                     sleep(1);
                 }
@@ -42,9 +42,9 @@ class Test
     {
         foreach ($args as $arg) {
             if (is_null($arg)) {
-                echo "null";
+                echo "\e[0;33mnull\e[0m";
             } elseif (is_bool($arg)) {
-                echo ($arg) ? "true" : "false";
+                echo ($arg) ? "\e[0;32mtrue\e[0m" : "\e[0;31mfalse\e[0m";
             } else {
                 print_r($arg);
             }
