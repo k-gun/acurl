@@ -122,6 +122,13 @@ class Test
         $client->send();
         self::echo("Success is 'true'? ", $client->response->isSuccess());
     }
+
+    public function test_failure()
+    {
+        $client = new ACurl\Client("get >> http://localhost/nö!");
+        $client->send();
+        self::echo("Failure is 'true'? ", $client->response->isFailure());
+    }
 }
 
 $method =@ $_SERVER["argv"][1];
