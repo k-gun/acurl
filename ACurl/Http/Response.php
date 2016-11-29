@@ -155,7 +155,7 @@ final class Response extends Stream
     {
         $statusCode = $this->getStatusCode();
 
-        return ($statusCode >= 400);
+        return ($statusCode >= 400 && $statusCode <= 599);
     }
 
     /**
