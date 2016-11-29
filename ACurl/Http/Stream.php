@@ -1,62 +1,148 @@
 <?php
+/**
+ * Copyright 2015 Kerem Güneş
+ *    <k-gun@mail.com>
+ *
+ * Apache License, Version 2.0
+ *    <http://www.apache.org/licenses/LICENSE-2.0>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 declare(strict_types=1);
 
 namespace ACurl\Http;
 
+/**
+ * @package ACurl
+ * @object  ACurl\Stream
+ * @author  Kerem Güneş <k-gun@mail.com>
+ */
 abstract class Stream implements StreamInterface
 {
+    /**
+     * Type.
+     * @var string
+     */
     protected $type;
+
+    /**
+     * Body.
+     * @var string
+     */
     protected $body;
+
+    /**
+     * Headers.
+     * @var array
+     */
     protected $headers = [];
+
+    /**
+     * Cookies.
+     * @var array
+     */
     protected $cookies = [];
 
+    /**
+     * Get type.
+     * @return int
+     */
     final public function getType(): int
     {
         return $this->type;
     }
 
+    /**
+     * Set body
+     * @param  string|array|object $body
+     * @return ACurl\StreamInterface
+     */
     final public function setBody($body): StreamInterface
     {
         if (is_array($body) || is_object($body)) {
             $body = http_build_query((array) $body);
         }
+
         $this->body = $body;
+
         return $this;
     }
 
+    /**
+     * Get body.
+     * @return string|null
+     */
     final public function getBody()
     {
         return $this->body;
     }
 
+    /**
+     * Set header.
+     * @param  string          $key
+     * @param  string|int|null $value
+     * @return ACurl\StreamInterface
+     */
     final public function setHeader(string $key, $value): StreamInterface
     {
         $this->headers[$key] = trim((string) $value);
+
         return $this;
     }
 
+    /**
+     * Set headers.
+     * @param  array $headers
+     * @return ACurl\StreamInterface
+     */
     final public function setHeaders(array $headers): StreamInterface
     {
         foreach ($headers as $key => $value) {
             $this->setHeader($key, $value);
         }
+
         return $this;
     }
 
+    /**
+     * Get header.
+     * @param  string   $key
+     * @param  any|null $valueDefault
+     * @return any|null
+     */
     final public function getHeader(string $key, $valueDefault = null)
     {
         $value = $this->headers[$key] ?? $valueDefault;
         if ($value === null) {
             $value = $this->headers[self::headerKeyToSnakeCase($key)] ?? $valueDefault;
         }
+
         return $value;
     }
 
+    /**
+     * Get headers.
+     * @return array
+     */
     final public function getHeaders(): array
     {
         return $this->headers;
     }
 
+    /**
+     * Get headers string.
+     * @return string
+     */
     final public function getHeadersString(): string
     {
         $return = '';
@@ -67,9 +153,14 @@ abstract class Stream implements StreamInterface
                 }
             }
         }
+
         return $return;
     }
 
+    /**
+     * Get raw headers.
+     * @return string
+     */
     final public function getHeadersRaw(): string
     {
         $return = '';
@@ -80,33 +171,61 @@ abstract class Stream implements StreamInterface
                 $return .= sprintf("%s: %s\n", self::headerKeyToDashCase($key), $value);
             }
         }
+
         return $return;
     }
 
+    /**
+     * Set cookie.
+     * @param  string          $key
+     * @param  string|int|null $value
+     * @return ACurl\StreamInterface
+     */
     final public function setCookie(string $key, $value): StreamInterface
     {
         $this->cookies[$key] = trim((string) $value);
+
         return $this;
     }
 
+    /**
+     * Set cookies.
+     * @param  array $cookies
+     * @return ACurl\StreamInterface
+     */
     final public function setCookies(array $cookies): StreamInterface
     {
         foreach ($cookies as $key => $value) {
             $this->setCookie($key, $value);
         }
+
         return $this;
     }
 
+    /**
+     * Get cookie.
+     * @param  string   $key
+     * @param  any|null $valueDefault
+     * @return any|null
+     */
     final public function getCookie(string $key, $valueDefault = null)
     {
         return $this->cookies[$key] ?? $valueDefault;
     }
 
+    /**
+     * Get cookies.
+     * @return array
+     */
     final public function getCookies(): array
     {
         return $this->cookies;
     }
 
+    /**
+     * Get cookies string.
+     * @return string
+     */
     final public function getCookiesString(): string
     {
         $return = '';
@@ -117,11 +236,14 @@ abstract class Stream implements StreamInterface
             }
             $return = join('; ', $cookies);
         }
+
         return $return;
     }
 
-
-
+    /**
+     * To string.
+     * @return string
+     */
     final public function toString(): string
     {
         $return  = trim($this->getHeadersRaw());
@@ -131,9 +253,16 @@ abstract class Stream implements StreamInterface
         return $return;
     }
 
+    /**
+     * Parse headers.
+     * @param  string $headers
+     * @param  int    $type
+     * @return array
+     */
     final public static function parseHeaders($headers, int $type): array
     {
         $return = [];
+
         // could be array (internally used)
         if (is_string($headers)) {
             (array) $headers =@ explode("\r\n", trim($headers));
@@ -181,9 +310,15 @@ abstract class Stream implements StreamInterface
         return $return;
     }
 
+    /**
+     * Parse cookies.
+     * @param  string $cookies
+     * @return array
+     */
     final public static function parseCookies($cookies): array
     {
         $return = [];
+
         if (is_string($cookies)) {
             $cookies = array_slice(explode(';', $cookies, 2), 0, 1);
         }
@@ -202,11 +337,21 @@ abstract class Stream implements StreamInterface
         return $return;
     }
 
+    /**
+     * Header key to snakecase.
+     * @param  string $key
+     * @return string
+     */
     final public static function headerKeyToSnakeCase(string $key): string
     {
         return preg_replace(['~\s+~', '~[\s-]+~'], [' ', '_'], strtolower($key));
     }
 
+    /**
+     * Header key to dashcase.
+     * @param  string $key
+     * @return string
+     */
     final public static function headerKeyToDashCase(string $key): string
     {
         return preg_replace_callback('~_(\w)~', function($matches) {
