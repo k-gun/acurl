@@ -146,4 +146,15 @@ final class Response extends Stream
 
         return ($statusCode >= 200 && $statusCode <= 299);
     }
+
+    /**
+     * Is failure.
+     * @return bool
+     */
+    final public function isFailure(): bool
+    {
+        $statusCode = $this->getStatusCode();
+
+        return ($statusCode >= 400);
+    }
 }
