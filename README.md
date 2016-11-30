@@ -3,10 +3,29 @@ ACurl: Aims to simplify your cURL operations in PHP.
 ### In a Nutshell
 
 ```php
-$client = new ACurl\Client('github.com');
+$client = new ACurl\Client('get >> github.com');
 $client->send();
 
 echo $client->response->getStatus();
+
+// or with shorcut request methods
+$client = new ACurl\Client('github.com');
+$client->get();
+
+echo $client->response->getStatus();
+```
+
+### Installation
+
+```bash
+$ composer require k-gun/acurl
+```
+
+Or
+
+```php
+require '/<PATH TO>/ACurl/Autoload.php';
+ACurl\Autoload::register();
 ```
 
 ### Usage
