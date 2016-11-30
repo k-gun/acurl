@@ -250,8 +250,11 @@ try {
 } catch (\Throwable $e) {
     echo $e->getMessage();
 }
+``
 
-### Bonus (Shortcut Methods)
+### Bonus (Shortcut Methods Instead of `send()`)
+
+```php
 $client->get([array $uriParams = null, [, array $headers = null, [, array $cookies = null]]]);
 $client->post($body = null, [array $uriParams = null, [, array $headers = null, [, array $cookies = null]]]);
 $client->put($body = null, [array $uriParams = null, [, array $headers = null, [, array $cookies = null]]]);
