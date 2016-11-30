@@ -1,114 +1,113 @@
-**Usage**
+ACurl: Aims to simplify your cURL operations in PHP.
 
-- Simple
-
-`$url = http://uri.li/cJjN`
+### In a Nutshell
 
 ```php
-$acurl = new ACurl\ACurl($url);
-// or set url later
-$acurl = new ACurl\ACurl();
-$acurl->setUrl($url);
+$client = new ACurl\Client('github.com');
+$client->send();
 
-// Execute cURL request
-$acurl->run();
-
-print_r($acurl->getRequestHeaders());
-print_r($acurl->getResponseHeaders());
-
-/* Result
-Array
-(
-    [host] => uri.li
-    [user_agent] => ACurl/v0.3 (+http://github.com/qeremy/acurl)
-    ...
-)
-
-Array
-(
-    [_status] => 301 Moved Permanently
-    [_status_code] => 301
-    [_status_text] => Moved Permanently
-    [content_length] => 0
-    [content_type] => text/html
-    [location] => http://google.com/
-    [pragma] => no-cache
-    [set_cookie] => Array
-        (
-            [0] => ...
-            [1] => ...
-        )
-    [vary] => Accept-Encoding
-    ...
-)
-*/
-
-// check response status
-print $acurl->getResponseStatus();     // 301 Moved Permanently
-print $acurl->getResponseStatusCode(); // 301
-print $acurl->getResponseStatusText(); // Moved Permanently
-
-// print response body
-print $acurl->getResponseBody();
+echo $client->response->getStatus();
 ```
 
-- Set & get options
+### Usage
+
+```php
+// simply
+$client = new ACurl\Client('get >> https://github.com/');
+
+// with uri & uri params
+$client = new ACurl\Client('https://github.com', [
+    'uriParams' => ['foo' => 1]
+]);
+
+// or all-inc.
+$client = new ACurl\Client(null, [
+    'method'    => 'post',
+    'uri'       => 'https://github.com',
+    'uriParams' => ['foo' => 1],
+    'headers'   => ['X-Foo' => 'Yes'],
+    'cookies'   => ['sid' => 'abc123'],
+    'body'      => ['lorem' => 'ipsum', 'dolor' => '...'],
+    // cURL options
+    'options'   => [CURLOPT_FOLLOWLOCATION => true]
+]);
+
+// execute request
+$client->send();
+
+echo $client->request->gettHeadersRaw();
+echo $client->response->gettHeadersRaw();
+
+// GET / HTTP/1.1
+// Accept: */*
+// Host: github.com
+// User-Agent: ACurl/v2.0.0 (+https://github.com/k-gun/acurl)
+//
+// HTTP/1.1 200 OK
+// Cache-Control: no-cache
+// Content-Security-Policy: default-src 'none'; ...
+// ...
+
+// response status
+echo $client->response->getStatus();     // 200
+echo $client->response->getStatusCode(); // 200 OK
+echo $client->response->getStatusText(); // OK
+
+// response body
+echo $client->response->getBody();
+```
+
+### Set & get options
 
 Note: See for available CURLOPT_* constants: http://tr.php.net/curl_setopt
 
 ```php
-$acurl = new ACurl\ACurl($url, [
-    'followlocation' => 1,
-    // ...
-]);
-// or set options later (all available)
-$acurl->setOption('followlocation', 1);
-$acurl->setOption(CURLOPT_FOLLOWLOCATION, 1);
-$acurl->setOptions(['followlocation' => 1]);
-$acurl->setFollowlocation(1);
+// set
+$client->setOption(CURLOPT_FOLLOWLOCATION, 1);
+// set all
+$client->setOptions([CURLOPT_FOLLOWLOCATION => 1, ...]);
 
-// all available
-print $acurl->getOption('followlocation'); // 1
-print $acurl->getOption(CURLOPT_FOLLOWLOCATION);
-print $acurl->getFollowlocation();
-
-// all optiions
-pritn $acurl->getOptions(); // [...]
+// get
+echo $client->getOption(CURLOPT_FOLLOWLOCATION);
+// get all
+echo $client->getOptions(); // [...]
 ```
 
-- Set & get method
+### Set & get method
 
 ```php
-$acurl = new ACurl\ACurl($url);
-$acurl->setMethod(ACurl\ACurl::METHOD_POST);
+// in init
+$client = new ACurl\ACurl("post >> $url");
+// or later
+$client->request->setMethod(ACurl\Http\Request::METHOD_POST);
 
-print $acurl->getMethod() // POST
+echo $client->getMethod() // POST
 ```
 
-- Set URL params
+### Set URL & URL params
 
 ```php
-$acurl = new ACurl\ACurl($url);
-$acurl->setUrlParam('foo', 1);
+$client = new ACurl\Client($url);
+$client->request->setUriParam('foo', 1);
 // or
-$acurl->setUrlParams([
+$client->request->setUriParams([
     'foo' => 1,
     'bar' => 'The bar!'
 ]);
 
-print $acurl->getUrlParam('foo'); // 1
-print $acurl->getUrlParams();     // [...]
+echo $client->request->getUriParam('foo'); // 1
+echo $client->request->getUriParams();     // [...]
 
-// $acurl->getUrl() -> <$url>?foo=1&bar=The+bar%21
+// $client->request->getUri() -> <$url>?foo=1&bar=The+bar%21
 ```
 
-- Get cURL info (after `run()`)
+### Get cURL info (after `send()`)
 
 ```php
-print $acurl->getInfo('url');
+echo $client->getInfo('url');
 // or
-$info = $acurl->getInfoAll();
-print $info['url'];
+$info = $client->getInfo();
+echo $info['url'];
 ```
 
 - Request
