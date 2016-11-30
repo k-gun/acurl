@@ -177,7 +177,11 @@ abstract class Stream implements StreamInterface
     {
         $return = '';
         foreach ($this->headers as $key => $value) {
-            if ($key == '_') {
+            if (is_array($value)) {
+                foreach ($value as $k => $v) {
+                    $return .= sprintf("%s: %s\n", self::headerKeyToDashCase($key), $v);
+                }
+            } elseif ($key == '_') {
                 $return .= sprintf("%s\n", $value);
             } elseif ($key[0] != '_') {
                 $return .= sprintf("%s: %s\n", self::headerKeyToDashCase($key), $value);
