@@ -27,6 +27,10 @@ namespace ACurl;
  */
 final class Autoload
 {
+    /**
+     * Register.
+     * @return bool
+     */
     final public static function register()
     {
         return spl_autoload_register(function($className) {
