@@ -201,7 +201,7 @@ $client->response->isRedirect(); // bool - 3**
 ### Auto Closing cURL Handler (default=true)
 
 ```php
-// Block auto close
+// block auto close
 $client->setAutoClose(false);
 
 $retry = 0;
