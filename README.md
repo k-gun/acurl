@@ -5,7 +5,7 @@ ACurl: Aims to simplify your cURL operations in PHP.
 ```php
 $client = new ACurl\Client('github.com');
 $client->send();
-// or simply GET
+// or simply exec a GET request
 $client->get();
 
 echo $client->response->getStatus();
@@ -35,10 +35,12 @@ $client = new ACurl\Client(null, [
 ]);
 
 // execute request
-$client->send();
+$response = $client->send();
 
 echo $client->request->gettHeadersRaw();
 echo $client->response->gettHeadersRaw();
+// or
+echo $response->getHeadersRaw();
 
 // GET / HTTP/1.1
 // Accept: */*
