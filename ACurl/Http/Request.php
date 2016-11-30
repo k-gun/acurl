@@ -131,6 +131,19 @@ final class Request extends Stream
     }
 
     /**
+     * Set URI param.
+     * @param  string     $key
+     * @param  string|int $value
+     * @return self
+     */
+    final public function setUriParam(string $key, $value): self
+    {
+        $this->uriParams[$key] = $value;
+
+        return $this;
+    }
+
+    /**
      * Set URI params.
      * @param  array $uriParams
      * @return self
