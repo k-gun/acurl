@@ -239,7 +239,7 @@ final class Client extends ClientBase
     }
 
     /**
-     * Oplen
+     * Open.
      * @return void
      * @throws \RuntimeException
      */
