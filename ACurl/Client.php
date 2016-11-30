@@ -215,6 +215,18 @@ final class Client extends ClientBase
     }
 
     /**
+     * Patch.
+     * @inheritdoc self::send()
+     */
+    final public function patch($body = null, array $uriParams = null,
+        array $headers = null, array $cookies = null): self
+    {
+        $this->request->setMethod(Request::METHOD_PATCH);
+
+        return $this->send($uriParams, $body, $headers, $cookies);
+    }
+
+    /**
      * Get.
      * @inheritdoc self::send()
      */
