@@ -1,4 +1,23 @@
 <?php
+/**
+ * Copyright 2015 Kerem Güneş
+ *    <k-gun@mail.com>
+ *
+ * Apache License, Version 2.0
+ *    <http://www.apache.org/licenses/LICENSE-2.0>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 declare(strict_types=1);
 
 namespace ACurl;
@@ -7,8 +26,18 @@ use ACurl\Http\Stream;
 use ACurl\Http\Request;
 use ACurl\Http\Response;
 
+/**
+ * @package ACurl
+ * @object  ACurl\Client
+ * @author  Kerem Güneş <k-gun@mail.com>
+ */
 final class Client extends ClientBase
 {
+    /**
+     * Constructor.
+     * @param string|null $uri
+     * @param array|null  $options
+     */
     final public function __construct(string $uri = null, array $options = null)
     {
         if (!extension_loaded('curl')) {
@@ -19,10 +48,14 @@ final class Client extends ClientBase
         $this->response = new Response();
 
         if ($uri) {
+            // notation: get github.com
+            // notation: get >> github.com (more readable?)
             if (preg_match('~^(?P<method>\w+)\s+(?:>>\s+)?(?<uri>.+)~', $uri, $matches)) {
                 $this->request->setMethod($matches['method'])
                               ->setUri($matches['uri']);
-            } else {
+            }
+            // notation: github.com
+            else {
                 $this->request->setMethod(Request::METHOD_GET)
                               ->setUri($uri);
             }
@@ -46,11 +79,23 @@ final class Client extends ClientBase
         }
     }
 
+    /**
+     * Destructor.
+     */
     final public function __destruct()
     {
         $this->close();
     }
 
+    /**
+     * Send.
+     * @param  array|null          $uriParams
+     * @param  string|array|object $body
+     * @param  array|null          $headers
+     * @param  array|null          $cookies
+     * @return self
+     * @throws \InvalidArgumentException, \RuntimeException
+     */
     final public function send(array $uriParams = null, $body = null,
         array $headers = null, array $cookies = null): self
     {
@@ -60,7 +105,7 @@ final class Client extends ClientBase
 
         $uri = $this->request->getUriFull();
         if ($uri == '') {
-            throw new \Exception('I need a URL! :(');
+            throw new \InvalidArgumentException('I need a URL! :(');
         }
 
         $this->open();
@@ -98,6 +143,7 @@ final class Client extends ClientBase
             $resultOutput = $result;
         }
 
+        // throw original cURL error
         if ($result === false) {
             throw new \RuntimeException(curl_error($this->ch), curl_errno($this->ch));
         }
@@ -112,6 +158,7 @@ final class Client extends ClientBase
             }
         }
 
+        // for proper explode'ing below
         if (!isset($options[CURLOPT_HEADER])) {
             $resultOutput = "\r\n\r\n". $resultOutput;
         }
@@ -131,6 +178,10 @@ final class Client extends ClientBase
         return $this;
     }
 
+    /**
+     * Get.
+     * @inheritdoc self::send()
+     */
     final public function get(array $uriParams = null,
         array $headers = null, array $cookies = null): self
     {
@@ -139,6 +190,10 @@ final class Client extends ClientBase
         return $this->send($uriParams, $headers, $cookies);
     }
 
+    /**
+     * Post.
+     * @inheritdoc self::send()
+     */
     final public function post($body = null, array $uriParams = null,
         array $headers = null, array $cookies = null): self
     {
@@ -147,6 +202,10 @@ final class Client extends ClientBase
         return $this->send($uriParams, $body, $headers, $cookies);
     }
 
+    /**
+     * Put.
+     * @inheritdoc self::send()
+     */
     final public function put($body = null, array $uriParams = null,
         array $headers = null, array $cookies = null): self
     {
@@ -155,6 +214,10 @@ final class Client extends ClientBase
         return $this->send($uriParams, $body, $headers, $cookies);
     }
 
+    /**
+     * Get.
+     * @inheritdoc self::send()
+     */
     final public function delete(array $uriParams = null,
         array $headers = null, array $cookies = null): self
     {
@@ -163,8 +226,11 @@ final class Client extends ClientBase
         return $this->send($uriParams, $headers, $cookies);
     }
 
-    // ...
-
+    /**
+     * Oplen
+     * @return void
+     * @throws \RuntimeException
+     */
     final private function open()
     {
         $this->ch = curl_init();
@@ -172,6 +238,11 @@ final class Client extends ClientBase
             throw new \RuntimeException('Could not initialize cURL session!');
         }
     }
+
+    /**
+     * Close.
+     * @return void
+     */
     final private function close()
     {
         if (is_resource($this->ch)) {
