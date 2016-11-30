@@ -23,9 +23,10 @@ declare(strict_types=1);
 namespace ACurl\Http;
 
 /**
- * @package ACurl
- * @object  ACurl\Stream
- * @author  Kerem Güneş <k-gun@mail.com>
+ * @package    ACurl
+ * @subpackage ACurl\Http
+ * @object     ACurl\Http\Stream
+ * @author     Kerem Güneş <k-gun@mail.com>
  */
 abstract class Stream implements StreamInterface
 {

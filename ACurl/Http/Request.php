@@ -23,9 +23,10 @@ declare(strict_types=1);
 namespace ACurl\Http;
 
 /**
- * @package ACurl
- * @object  ACurl\Request
- * @author  Kerem Güneş <k-gun@mail.com>
+ * @package    ACurl
+ * @subpackage ACurl\Http
+ * @object     ACurl\Http\Request
+ * @author     Kerem Güneş <k-gun@mail.com>
  */
 final class Request extends Stream
 {
