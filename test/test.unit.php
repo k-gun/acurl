@@ -7,7 +7,7 @@ class Test
         ini_set("error_reporting", E_ALL);
 
         require __dir__ ."/inc.php";
-        require __dir__ ."/../ACurl/Autoload.php";
+        require __dir__ ."/../src/Autoload.php";
 
         ACurl\Autoload::register();
     }
