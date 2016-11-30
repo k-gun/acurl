@@ -250,7 +250,7 @@ try {
 } catch (\Throwable $e) {
     echo $e->getMessage();
 }
-``
+```
 
 ### Bonus (Shortcut Methods Instead of `send()`)
 
