@@ -6,8 +6,6 @@ ACurl: Aims to simplify your cURL operations in PHP.
 $client = new ACurl\Client('get >> github.com');
 $client->send();
 
-echo $client->response->getStatus();
-
 // or with shorcut request methods
 $client = new ACurl\Client('github.com');
 $client->get();
@@ -24,8 +22,7 @@ $ composer require k-gun/acurl
 Or
 
 ```php
-require '/<PATH TO>/ACurl/Autoload.php';
-ACurl\Autoload::register();
+require('/<PATH TO>/ACurl/Autoload.php') && ACurl\Autoload::register();
 ```
 
 ### Usage
