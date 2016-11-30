@@ -1,0 +1,15 @@
+{
+    "name": "k-gun/acurl",
+    "type": "library",
+    "version": "2.0.0",
+    "homepage": "http://github.com/k-gun/acurl",
+    "description": "cURL Wrapper for PHP.",
+    "keywords": ["cURL"],
+    "license": "Apache License Version 2.0",
+    "authors": [{
+        "name": "Kerem Güneş", "email": "k-gun@mail.com"
+    }],
+    "require": {
+        "php": ">=7.0.0"
+    }
+}
