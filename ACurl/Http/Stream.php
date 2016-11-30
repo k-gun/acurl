@@ -96,7 +96,14 @@ abstract class Stream implements StreamInterface
      */
     final public function setHeader(string $key, $value): StreamInterface
     {
-        $this->headers[$key] = trim((string) $value);
+        if (is_array($value)) {
+            if (!isset($this->headers[$key])) {
+                $this->headers[$key] = [];
+            }
+            $this->headers[$key] = array_map('trim', $value);
+        } else {
+            $this->headers[$key] = trim((string) $value);
+        }
 
         return $this;
     }
