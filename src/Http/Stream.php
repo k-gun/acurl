@@ -345,7 +345,7 @@ abstract class Stream implements StreamInterface
         $return = [];
 
         if (is_string($cookies)) {
-            $cookies = explode(';', $cookies, 2)[0];
+            $cookies = (array) explode(';', $cookies, 2)[0];
         } elseif (is_array($cookies)) {
             foreach ($cookies as $i => $cookie) {
                 $cookies[$i] = explode(';', $cookie, 2)[0];
