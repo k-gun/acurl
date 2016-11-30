@@ -196,6 +196,11 @@ $client->response->getStatusText(); // string
 $client->response->isSuccess();  // bool - 2**
 $client->response->isFailure();  // bool - 4** or 5**
 $client->response->isRedirect(); // bool - 3**
+
+// response
+$response = $client->send() // or get(), post() etc..
+// or
+$response = $client->getResponse();
 ```
 
 ### Auto Closing cURL Handler (default=true)
