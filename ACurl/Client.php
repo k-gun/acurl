@@ -96,10 +96,11 @@ final class Client extends ClientBase
      * @return self
      * @throws \InvalidArgumentException, \RuntimeException
      */
-    final public function send(array $uriParams = null, $body = null,
+    final public function send($body = null, array $uriParams = null,
         array $headers = null, array $cookies = null): self
     {
-        $this->request->setUriParams((array) $uriParams)
+        $this->request->setBody($body)
+                      ->setUriParams((array) $uriParams)
                       ->setHeaders((array) $headers)
                       ->setCookies((array) $cookies);
 
@@ -199,7 +200,7 @@ final class Client extends ClientBase
     {
         $this->request->setMethod(Request::METHOD_POST);
 
-        return $this->send($uriParams, $body, $headers, $cookies);
+        return $this->send($body, $uriParams, $headers, $cookies);
     }
 
     /**
@@ -211,7 +212,7 @@ final class Client extends ClientBase
     {
         $this->request->setMethod(Request::METHOD_PUT);
 
-        return $this->send($uriParams, $body, $headers, $cookies);
+        return $this->send($body, $uriParams, $headers, $cookies);
     }
 
     /**
@@ -223,7 +224,7 @@ final class Client extends ClientBase
     {
         $this->request->setMethod(Request::METHOD_PATCH);
 
-        return $this->send($uriParams, $body, $headers, $cookies);
+        return $this->send($body, $uriParams, $headers, $cookies);
     }
 
     /**
