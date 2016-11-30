@@ -55,6 +55,15 @@ abstract class Stream implements StreamInterface
     protected $cookies = [];
 
     /**
+     * String magic.
+     * @return string
+     */
+    final public function __toString(): string
+    {
+        return $this->toString();
+    }
+
+    /**
      * Get type.
      * @return int
      */
