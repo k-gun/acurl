@@ -192,10 +192,10 @@ $client->response->getStatus();     // string
 $client->response->getStatusCode(); // int
 $client->response->getStatusText(); // string
 
-// shorcut checkers
-$client->response->isSuccess();  // bool
-$client->response->isFailure();  // bool
-$client->response->isRedirect(); // bool
+// shorcut checkers for response status code
+$client->response->isSuccess();  // bool - 2**
+$client->response->isFailure();  // bool - 4** or 5**
+$client->response->isRedirect(); // bool - 3**
 ```
 
 ### Auto Closing cURL Handler (default=true)
