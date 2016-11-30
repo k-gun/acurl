@@ -3,7 +3,7 @@
     "type": "library",
     "version": "2.0.0",
     "homepage": "http://github.com/k-gun/acurl",
-    "description": "cURL Wrapper for PHP.",
+    "description": "A cURL wrapper super easy...",
     "keywords": ["cURL"],
     "license": "Apache License Version 2.0",
     "authors": [{
