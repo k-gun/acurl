@@ -5,6 +5,8 @@ ACurl: Aims to simplify your cURL operations in PHP.
 ```php
 $client = new ACurl\Client('github.com');
 $client->send();
+// or simply GET
+$client->get();
 
 echo $client->response->getStatus();
 ```
@@ -57,7 +59,7 @@ echo $client->response->getStatusText(); // OK
 echo $client->response->getBody();
 ```
 
-### Set & get options
+### Set & Get Options
 
 Note: See for available CURLOPT_* constants: http://tr.php.net/curl_setopt
 
@@ -73,18 +75,7 @@ echo $client->getOption(CURLOPT_FOLLOWLOCATION);
 echo $client->getOptions(); // [...]
 ```
 
-### Set & get method
-
-```php
-// in init
-$client = new ACurl\ACurl("post >> $url");
-// or later
-$client->request->setMethod(ACurl\Http\Request::METHOD_POST);
-
-echo $client->getMethod() // POST
-```
-
-### Set URL & URL params
+### Set URL & URL Params
 
 ```php
 $client = new ACurl\Client($url);
@@ -101,7 +92,7 @@ echo $client->request->getUriParams();     // [...]
 // $client->request->getUri() -> <$url>?foo=1&bar=The+bar%21
 ```
 
-### Get cURL info (after `send()`)
+### Get cURL Info (After `send()`)
 
 ```php
 echo $client->getInfo('url');
@@ -110,83 +101,114 @@ $info = $client->getInfo();
 echo $info['url'];
 ```
 
-- Request
+### Request
 
 ```php
-// set headers (all available)
-$acurl->setRequestHeader('X-Foo-1: foo1');
-$acurl->setRequestHeader('X-Foo-1', 'foo1');
-$acurl->setRequestHeaders(['X-Foo-2: foo2']);
-$acurl->setRequestHeaders(['X-Foo-3' => 'foo3']);
+// send (curl exec)
+$client->send();
+$client->send([any $body = null, [, array $uriParams = null, [, array $headers = null, [, array $cookies = null]]]]);
 
-// set body (while posting data)
-// Note: useless if method is GET
-$acurl->setRequestBody('foo=1&bar=The+bar%21');
-$acurl->setRequestBody([
+// get raw request
+echo $client->request;
+echo $client->request->toString();
+echo $client->getRequest();
+echo $client->getRequest()->toString();
+
+// GET / HTTP/1.1
+// Accept: */*
+// Host: github.com
+// User-Agent: ACurl/v2.0.0 (+https://github.com/k-gun/acurl)
+// ...
+// [body]
+
+// method
+$client->request->setMethod(ACurl\Http\Request::METHOD_POST);
+$client->request->getMethod(); // string
+
+// uri
+$client->request->setUri(...);
+$client->request->getUri();     // string
+$client->request->getUriFull(); // string
+
+// uri params
+$client->request->setUriParam('foo', 1);
+$client->request->setUriParams(['foo', 1]);
+$client->request->getUriParam('foo'); // string|int
+$client->request->getUriParams();
+
+// body
+$client->request->setBody('foo=1&bar=The+bar%21');
+$client->request->setBody([
     'foo' => 1,
     'bar' => 'The bar!'
 ]);
 
-// get raw equest
-print $acurl->getRequest();
-/*
-GET /cJjN HTTP/1.1
-User-Agent: ACurl/v1.0
-Host: uri.li
-...
-*/
+$client->request->getBody();
 
-// get request body
-$acurl->getRequestBody();
+// headers
+$client->request->setHeader('host', '...');
+$client->request->setHeaders(['host', '...']);
 
-// get request header
-$acurl->getRequestHeader('host');
-// get request headers
-$acurl->getRequestHeaders(); // [...]
-// get request headers raw
-$acurl->getRequestHeaders(true);
+$client->request->getHeader('host');  // string
+$client->request->getHeaders();       // array
+$client->request->getHeadersRaw();    // string
+$client->request->getHeadersString(); // string
+
+// cookies
+$client->request->setCookie('foo', 1);
+$client->request->setCookies(['foo', 1]);
+
+$client->request->getCookie('foo');   // string
+$client->request->getCookies();       // array
+$client->request->getCookiesString(); // string
 ```
 
-- Response
+### Response
 
 ```php
 // get raw response
-$acurl->getResponse();
-/*
-HTTP/1.1 301 Moved Permanently
-Server: nginx
-Date: Thu, 22 Aug 2013 22:34:22 GMT
-Content-Type: text/html
-Content-Length: 0
-...
-*/
+echo $client->response;
+echo $client->response->toString();
+echo $client->getResponse();
+echo $client->getResponse()->toString();
 
-// get response body
-$acurl->getResponseBody();
+// HTTP/1.1 200 OK
+// Cache-Control: no-cache
+// Content-Security-Policy: default-src 'none';
+// ...
+// [body]
 
-// get response header
-$acurl->getResponseHeader('_status_code');
-// get response headers
-$acurl->getResponseHeaders(); // [...]
-// get response headers raw
-$acurl->getResponseHeaders(true);
+// body
+$client->response->getBody();
 
-// not storing response body/headers
-$acurl->storeResponseBody(false);
-$acurl->storeResponseHeaders(false);
+// header
+$client->response->getHeader('_status'); // int
+$client->response->getHeaders();         // [...]
+$client->response->getHeadersRaw();      // string
+$client->response->getHeadersString();   // string
+
+// status
+$client->response->getStatus();     // string
+$client->response->getStatusCode(); // int
+$client->response->getStatusText(); // string
+
+// shorcut checkers
+$client->response->isSuccess();  // bool
+$client->response->isFailure();  // bool
+$client->response->isRedirect(); // bool
 ```
 
-- Auto closing cURL handler (default=true)
+### Auto Closing cURL Handler (default=true)
 
 ```php
 // Block auto close
-$acurl->autoClose(false);
+$client->setAutoClose(false);
 
 $retry = 0;
 do {
     // exec
-    $acurl->run();
-    if (($body = $acurl->getResponseBody()) != '') {
+    $client->send();
+    if ('' != ($body = $client->response->getBody())) {
         break;
     }
     // wait a sec
@@ -197,19 +219,19 @@ do {
 
 // remember to call this
 // forgot anyway? it's ok! __destruct() will close it...
-$acurl->close();
+$client->close();
 ```
 
-- Simple upload
+### Simple Upload
 
 ```php
-$acurl = new ACurl\ACurl('http://local/upload.php');
-$acurl->setMethod(ACurl\ACurl::METHOD_POST);
-$acurl->setRequestBody(array(
-    'fileName' => 'myfile-2.txt',
-    'fileData' => file_get_contents('./myfile-1.txt'),
-));
-$acurl->run();
+$client = new ACurl\ACurl('post >> http://local/upload.php', [
+    'body' => [
+        'fileName' => 'myfile-2.txt',
+        'fileData' => file_get_contents('./myfile-1.txt'),
+    ]
+]);
+$client->send();
 
 // upload.php
 $fileName = $_POST['fileName'];
@@ -217,11 +239,20 @@ $fileData = $_POST['fileData'];
 file_put_contents("./$fileName", $fileData);
 ```
 
-- Error handling
+### Errors
 
 ```php
-if ($acurl->isFail()) {
-    printf('Error! Code[%d] Text[%s]',
-        $acurl->getFailCode(), $acurl->getFailText());
+try {
+    // ...
+    $client->send();
+} catch (\Throwable $e) {
+    echo $e->getMessage();
 }
+
+### Bonus (Shortcut Methods)
+$client->get([array $uriParams = null, [, array $headers = null, [, array $cookies = null]]]);
+$client->post($body = null, [array $uriParams = null, [, array $headers = null, [, array $cookies = null]]]);
+$client->put($body = null, [array $uriParams = null, [, array $headers = null, [, array $cookies = null]]]);
+$client->patch($body = null, [array $uriParams = null, [, array $headers = null, [, array $cookies = null]]]);
+$client->delete([array $uriParams = null, [, array $headers = null, [, array $cookies = null]]]);
 ```
