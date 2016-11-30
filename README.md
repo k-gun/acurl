@@ -182,7 +182,7 @@ echo $client->getResponse()->toString();
 $client->response->getBody();
 
 // header
-$client->response->getHeader('_status'); // int
+$client->response->getHeader('_status'); // string
 $client->response->getHeaders();         // [...]
 $client->response->getHeadersRaw();      // string
 $client->response->getHeadersString();   // string
