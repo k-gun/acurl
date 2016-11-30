@@ -180,7 +180,7 @@ final class Client extends ClientBase
 
     /**
      * Get.
-     * @inheritdoc self::send()
+     * @inheritDoc self::send()
      */
     final public function get(array $uriParams = null,
         array $headers = null, array $cookies = null): self
@@ -192,7 +192,7 @@ final class Client extends ClientBase
 
     /**
      * Post.
-     * @inheritdoc self::send()
+     * @inheritDoc self::send()
      */
     final public function post($body = null, array $uriParams = null,
         array $headers = null, array $cookies = null): self
@@ -204,7 +204,7 @@ final class Client extends ClientBase
 
     /**
      * Put.
-     * @inheritdoc self::send()
+     * @inheritDoc self::send()
      */
     final public function put($body = null, array $uriParams = null,
         array $headers = null, array $cookies = null): self
@@ -216,7 +216,7 @@ final class Client extends ClientBase
 
     /**
      * Patch.
-     * @inheritdoc self::send()
+     * @inheritDoc self::send()
      */
     final public function patch($body = null, array $uriParams = null,
         array $headers = null, array $cookies = null): self
@@ -228,7 +228,7 @@ final class Client extends ClientBase
 
     /**
      * Get.
-     * @inheritdoc self::send()
+     * @inheritDoc self::send()
      */
     final public function delete(array $uriParams = null,
         array $headers = null, array $cookies = null): self
