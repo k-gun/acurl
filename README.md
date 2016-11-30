@@ -18,7 +18,7 @@ echo $client->response->getStatus();
 $client = new ACurl\Client('get >> https://github.com/');
 
 // with uri & uri params
-$client = new ACurl\Client('https://github.com', [
+$client = new ACurl\Client('get >> https://github.com', [
     'uriParams' => ['foo' => 1]
 ]);
 
