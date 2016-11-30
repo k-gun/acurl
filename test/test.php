@@ -15,12 +15,15 @@ ACurl\Autoload::register();
 // ]);
 // $client->send();
 
-$client = new ACurl\Client('get >> http://localhost/');
+$client = new ACurl\Client('get >> https://github.com/');
 // $client = new ACurl\Client('get >> http://www.google.com.tr/');
 $client->send();
 
-prs($client->request->toString());
-prs($client->response->toString());
+// prs($client->request->toString());
+// prs($client->response->toString());
 // prs($client->request->getMethod());
 // prs($client->request->getHeadersRaw());
 // prs($client->response->getHeadersRaw());
+// prs($client->response->getCookies());
+// prs($client->response->getCookie("logged_in"));
+// prs($client->response->getCookiesString());
