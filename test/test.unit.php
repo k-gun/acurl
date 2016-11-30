@@ -136,6 +136,19 @@ class Test
         $client->send();
         self::echo("Redirect is 'true'? ", $client->response->isRedirect());
     }
+
+    public function test_timeout()
+    {
+        try {
+            $client = new ACurl\Client("get >> https://github.com/", [
+                "options" => [CURLOPT_TIMEOUT => 0]
+            ]);
+            $client->send();
+        } catch (\Throwable $e) {
+            self::echo("Error thrown? ", true);
+            self::echo(sprintf("Error code[%s] message[%s]. ", $e->getCode(), $e->getMessage()));
+        }
+    }
 }
 
 $method =@ $_SERVER["argv"][1];
