@@ -93,11 +93,11 @@ final class Client extends ClientBase
      * @param  string|array|object $body
      * @param  array|null          $headers
      * @param  array|null          $cookies
-     * @return self
+     * @return ACurl\Http\Response
      * @throws \InvalidArgumentException, \RuntimeException
      */
     final public function send($body = null, array $uriParams = null,
-        array $headers = null, array $cookies = null): self
+        array $headers = null, array $cookies = null): Response
     {
         $this->request->setBody($body)
                       ->setUriParams((array) $uriParams)
@@ -176,7 +176,7 @@ final class Client extends ClientBase
             $this->close();
         }
 
-        return $this;
+        return $this->response;
     }
 
     /**
@@ -184,7 +184,7 @@ final class Client extends ClientBase
      * @inheritDoc self::send()
      */
     final public function get(array $uriParams = null,
-        array $headers = null, array $cookies = null): self
+        array $headers = null, array $cookies = null): Response
     {
         $this->request->setMethod(Request::METHOD_GET);
 
@@ -196,7 +196,7 @@ final class Client extends ClientBase
      * @inheritDoc self::send()
      */
     final public function post($body = null, array $uriParams = null,
-        array $headers = null, array $cookies = null): self
+        array $headers = null, array $cookies = null): Response
     {
         $this->request->setMethod(Request::METHOD_POST);
 
@@ -208,7 +208,7 @@ final class Client extends ClientBase
      * @inheritDoc self::send()
      */
     final public function put($body = null, array $uriParams = null,
-        array $headers = null, array $cookies = null): self
+        array $headers = null, array $cookies = null): Response
     {
         $this->request->setMethod(Request::METHOD_PUT);
 
@@ -220,7 +220,7 @@ final class Client extends ClientBase
      * @inheritDoc self::send()
      */
     final public function patch($body = null, array $uriParams = null,
-        array $headers = null, array $cookies = null): self
+        array $headers = null, array $cookies = null): Response
     {
         $this->request->setMethod(Request::METHOD_PATCH);
 
@@ -232,7 +232,7 @@ final class Client extends ClientBase
      * @inheritDoc self::send()
      */
     final public function delete(array $uriParams = null,
-        array $headers = null, array $cookies = null): self
+        array $headers = null, array $cookies = null): Response
     {
         $this->request->setMethod(Request::METHOD_DELETE);
 
