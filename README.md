@@ -22,7 +22,8 @@ $ composer require k-gun/acurl
 Or
 
 ```php
-require('/<PATH TO>/ACurl/Autoload.php') && ACurl\Autoload::register();
+require('/<PATH TO ACurl>/src/Autoload.php')
+    && ACurl\Autoload::register();
 ```
 
 ### Usage
