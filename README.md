@@ -78,17 +78,17 @@ echo $client->response->getBody();
 
 ### Set & Get Options
 
-Note: See for available CURLOPT_* constants: http://tr.php.net/curl_setopt
+Note: See for available CURLOPT_* constants: http://php.net/curl_setopt
 
 ```php
 // set
+$client->setOption('followlocation', 1); // drop CURLOPT_ prefix
 $client->setOption(CURLOPT_FOLLOWLOCATION, 1);
-// set all
 $client->setOptions([CURLOPT_FOLLOWLOCATION => 1, ...]);
 
 // get
+echo $client->getOption('followlocation');
 echo $client->getOption(CURLOPT_FOLLOWLOCATION);
-// get all
 echo $client->getOptions(); // [...]
 ```
 
