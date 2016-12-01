@@ -68,8 +68,8 @@ echo $response->getHeadersRaw();
 // ...
 
 // response status
-echo $client->response->getStatus();     // 200
-echo $client->response->getStatusCode(); // 200 OK
+echo $client->response->getStatus();     // 200 OK
+echo $client->response->getStatusCode(); // 200
 echo $client->response->getStatusText(); // OK
 
 // response body
