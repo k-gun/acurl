@@ -36,7 +36,7 @@ abstract class ClientBase
      * Version.
      * @const string
      */
-    const VERSION = '2.0.1';
+    const VERSION = '2.1.0';
 
     /**
      * Request.
@@ -145,12 +145,26 @@ abstract class ClientBase
 
     /**
      * Set option.
-     * @param  int $key
-     * @param  any $value
+     * @param  int|string $key
+     * @param  any        $value
      * @return self
+     * @throws \InvalidArgumentException
      */
-    final public function setOption(int $key, $value): self
+    final public function setOption($key, $value): self
     {
+        if (is_string($key)) {
+            // add 'curlopt_' prefix & get constant value
+            $keyValue =@ constant('CURLOPT_'. strtoupper($key));
+            if ($keyValue === null) {
+                throw new \InvalidArgumentException(
+                    "Invalid key '{$key}' given! ".
+                    "Pass all string option keys without 'curlopt_' prefix and ".
+                    "see for available options here: http://php.net/curl_setopt."
+                );
+            }
+            $key = $keyValue;
+        }
+
         $this->options[$key] = $value;
 
         return $this;
