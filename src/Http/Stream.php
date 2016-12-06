@@ -174,6 +174,8 @@ abstract class Stream implements StreamInterface
                     $headers[$key] = $value;
                 }
             }
+        } elseif ($this->type == StreamInterface::TYPE_RESPONSE) {
+            $headers = $this->headers;
         }
 
         return $headers;

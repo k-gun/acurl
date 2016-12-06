@@ -36,7 +36,7 @@ abstract class ClientBase
      * Version.
      * @const string
      */
-    const VERSION = '2.1.1';
+    const VERSION = '2.1.2';
 
     /**
      * Request.
