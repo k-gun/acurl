@@ -149,6 +149,9 @@ final class Client extends ClientBase
             throw new \RuntimeException(curl_error($this->ch), curl_errno($this->ch));
         }
 
+        $this->request->setRun(true);
+        $this->response->setRun(true);
+
         $this->info = curl_getinfo($this->ch);
 
         if (isset($this->info['request_header'])) {

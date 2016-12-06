@@ -55,6 +55,12 @@ abstract class Stream implements StreamInterface
     protected $cookies = [];
 
     /**
+     * Run.
+     * @var bool
+     */
+    protected $run = false;
+
+    /**
      * String magic.
      * @return string
      */
@@ -153,7 +159,24 @@ abstract class Stream implements StreamInterface
      */
     final public function getHeaders(): array
     {
-        return $this->headers;
+        if (!$this->run) {
+            return $this->headers;
+        }
+
+        $headers = [];
+        if ($this->type == StreamInterface::TYPE_REQUEST) {
+            $found = false;
+            foreach ($this->headers as $key => $value) {
+                if (!$found && $key == '_') {
+                    $found = true;
+                }
+                if ($found) {
+                    $headers[$key] = $value;
+                }
+            }
+        }
+
+        return $headers;
     }
 
     /**
@@ -164,7 +187,7 @@ abstract class Stream implements StreamInterface
     {
         $return = '';
         if (!empty($this->headers)) {
-            foreach ($this->headers as $key => $value) {
+            foreach ($this->getHeaders() as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $k => $v) {
                         $return .= sprintf("%s: %s\n", self::headerKeyToDashCase($key), $v);
@@ -185,7 +208,7 @@ abstract class Stream implements StreamInterface
     final public function getHeadersRaw(): string
     {
         $return = '';
-        foreach ($this->headers as $key => $value) {
+        foreach ($this->getHeaders() as $key => $value) {
             if (is_array($value)) {
                 foreach ($value as $k => $v) {
                     $return .= sprintf("%s: %s\n", self::headerKeyToDashCase($key), $v);
@@ -276,6 +299,16 @@ abstract class Stream implements StreamInterface
         $return .= $this->getBody();
 
         return $return;
+    }
+
+    /**
+     * Set run.
+     * @param  bool $run
+     * @return void
+     */
+    final public function setRun(bool $run)
+    {
+        $this->run = $run;
     }
 
     /**
