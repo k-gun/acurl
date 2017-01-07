@@ -36,7 +36,7 @@ abstract class ClientBase
      * Version.
      * @const string
      */
-    const VERSION = '2.1.2';
+    const VERSION = '2.2.0';
 
     /**
      * Request.
@@ -186,12 +186,25 @@ abstract class ClientBase
 
     /**
      * Get optionç
-     * @param  int      $key
-     * @param  any|null $valueDefault
-     * @return any|null
+     * @param  int|string $key
+     * @param  any        $valueDefault
+     * @return any
      */
-    final public function getOption(int $key, $valueDefault = null)
+    final public function getOption($key, $valueDefault = null)
     {
+        if (is_string($key)) {
+            // add 'curlopt_' prefix & get constant value
+            $keyValue =@ constant('CURLOPT_'. strtoupper($key));
+            if ($keyValue === null) {
+                throw new \InvalidArgumentException(
+                    "Invalid key '{$key}' given! ".
+                    "Pass all string option keys without 'curlopt_' prefix and ".
+                    "see for available options here: http://php.net/curl_setopt."
+                );
+            }
+            $key = $keyValue;
+        }
+
         return $this->options[$key] ?? $valueDefault;
     }
 
@@ -227,17 +240,21 @@ abstract class ClientBase
 
     /**
      * Get info.
-     * @param  string|null $key
-     * @param  any|null    $valueDefault
-     * @return any|null
+     * @return array|null
      */
-    final public function getInfo(string $key = null, $valueDefault = null)
+    final public function getInfo()
     {
-        // get all info
-        if ($key === null) {
-            return $this->info;
-        }
+        return $this->info;
+    }
 
+    /**
+     * Get info value.
+     * @param  string $key
+     * @param  any    $valueDefault
+     * @return any
+     */
+    final public function getInfoValue(string $key, $valueDefault = null)
+    {
         return $this->info[$key] ?? $valueDefault;
     }
 }
